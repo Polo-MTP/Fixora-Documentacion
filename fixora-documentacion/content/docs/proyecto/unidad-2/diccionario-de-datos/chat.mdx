@@ -1,0 +1,74 @@
+---
+title: "Chat"
+description: "Conversación entre cliente y proveedor ligada a cada solicitud, con mensajes y adjuntos."
+---
+
+Módulo con **3 tablas**: `conversations`, `request_messages`, `message_attachments`. Las convenciones de tipos y llaves están en la [página del diccionario](/docs/proyecto/unidad-2/diccionario-de-datos#convenciones).
+
+## Diagrama
+
+Solo se muestran las llaves primarias (PK) y foráneas (FK). Las tablas sin columnas (`service_requests`, `users`) pertenecen a otros módulos.
+
+<Mermaid chart={`
+erDiagram
+    conversations {
+        BIGINT UniqueID PK
+        BIGINT request_id FK
+    }
+    request_messages {
+        BIGINT UniqueID PK
+        BIGINT conversation_id FK
+        BIGINT sender_id FK
+        BIGINT message_reply_id FK
+    }
+    message_attachments {
+        BIGINT UniqueID PK
+        BIGINT message_id FK
+    }
+    service_requests ||--o{ conversations : "request_id"
+    conversations ||--o{ request_messages : "conversation_id"
+    users ||--o{ request_messages : "sender_id"
+    request_messages ||--o{ request_messages : "message_reply_id"
+    request_messages ||--o{ message_attachments : "message_id"
+`} />
+
+## Tablas
+
+### `conversations`
+
+Conversación asociada a una solicitud.
+
+| Columna      | Tipo     | Llave                 | Descripción                                                |
+| ------------ | -------- | --------------------- | ---------------------------------------------------------- |
+| `UniqueID`   | BIGINT   | PK                    | Identificador único del registro.                          |
+| `request_id` | BIGINT   | FK → service_requests | Referencia a `service_requests`.                           |
+| `status`     | VARCHAR  |                       | Estado de la conversación (por ejemplo: abierta, cerrada). |
+| `created_at` | DATETIME |                       | Fecha y hora de creación del registro.                     |
+
+### `request_messages`
+
+Mensajes de una conversación.
+
+| Columna            | Tipo     | Llave                 | Descripción                                                                               |
+| ------------------ | -------- | --------------------- | ----------------------------------------------------------------------------------------- |
+| `UniqueID`         | BIGINT   | PK                    | Identificador único del registro.                                                         |
+| `conversation_id`  | BIGINT   | FK → conversations    | Referencia a `conversations`.                                                             |
+| `sender_id`        | BIGINT   | FK → users            | Referencia a `users`.                                                                     |
+| `message`          | VARCHAR  |                       | Texto del mensaje.                                                                        |
+| `message_reply_id` | BIGINT   | FK → request_messages | Mensaje al que responde; nulo si no es una respuesta.                                     |
+| `client_uuid`      | VARCHAR  |                       | Identificador generado por la app para evitar mensajes duplicados al reintentar el envío. |
+| `read_at`          | DATETIME |                       | Fecha y hora en que se leyó; nulo si aún no se lee.                                       |
+| `created_at`       | DATETIME |                       | Fecha y hora de creación del registro.                                                    |
+
+### `message_attachments`
+
+Archivos adjuntos a un mensaje.
+
+| Columna       | Tipo     | Llave                 | Descripción                                         |
+| ------------- | -------- | --------------------- | --------------------------------------------------- |
+| `UniqueID`    | BIGINT   | PK                    | Identificador único del registro.                   |
+| `message_id`  | BIGINT   | FK → request_messages | Referencia a `request_messages`.                    |
+| `storage_key` | VARCHAR  |                       | Llave del archivo en el almacenamiento (no la URL). |
+| `mime_type`   | ENUM     |                       | Tipo MIME del archivo (imagen, PDF, etc.).          |
+| `size_bytes`  | INT      |                       | Tamaño del archivo en bytes.                        |
+| `created_at`  | DATETIME |                       | Fecha y hora de creación del registro.              |

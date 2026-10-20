@@ -1,45 +1,39 @@
-# fixora-documentacion
+# Fixora · Documentación
 
-This is a Next.js application generated with
-[Create Fumadocs](https://github.com/fuma-nama/fumadocs).
-
-Run development server:
+Sitio de documentación del proyecto Fixora, hecho con [Fumadocs](https://fumadocs.dev) y Next.js.
 
 ```bash
-npm run dev
-# or
+pnpm install
 pnpm dev
-# or
-yarn dev
 ```
 
-Open http://localhost:3000 with your browser to see the result.
+Abre http://localhost:3000.
 
-## Explore
+## Estructura del contenido
 
-In the project, you can see:
+```txt
+content/docs/
+├── (general)/              Introducción y herramientas
+├── proyecto/               Entregables formales
+│   └── unidad-2/
+│       ├── control-de-versiones.mdx
+│       ├── flujo-de-trabajo.mdx
+│       └── diccionario-de-datos/   Una página por módulo
+└── desarrollo/             Guías: ramas, commits y pull requests
+```
 
-- `lib/source.ts`: Code for content source adapter, [`loader()`](https://fumadocs.dev/docs/headless/source-api) provides the interface to access your content.
-- `lib/layout.shared.tsx`: Shared options for layouts, optional but preferred to keep.
+- Cada carpeta tiene un `meta.json` con el título y el orden de sus páginas. Las que llevan `"root": true` aparecen como secciones en el selector del menú lateral.
+- Los archivos `.md` de la raíz del repositorio son la fuente original del contenido.
+- Para diagramas usa `<Mermaid chart={`...`} />` dentro de cualquier `.mdx`.
 
-| Route                     | Description                                            |
-| ------------------------- | ------------------------------------------------------ |
-| `app/(home)`              | The route group for your landing page and other pages. |
-| `app/docs`                | The documentation layout and pages.                    |
-| `app/api/search/route.ts` | The Route Handler for search.                          |
+## Código
 
-### Fumadocs MDX
-
-Collections are defined with the [Macro API](https://fumadocs.dev/docs/mdx/macro) in `lib/source.ts`.
-
-Read the [Introduction](https://fumadocs.dev/docs/mdx) for further details.
-
-## Learn More
-
-To learn more about Next.js and Fumadocs, take a look at the following
-resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js
-  features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [Fumadocs](https://fumadocs.dev) - learn about Fumadocs
+| Ruta | Qué contiene |
+| --- | --- |
+| `src/app/(home)/page.tsx` | Página de inicio |
+| `content/team.json` | Integrantes que muestra la página `/equipo` (áreas válidas: `movil`, `web`, `backend`, `docs`) |
+| `src/app/docs/layout.tsx` | Layout de la documentación y color de cada sección |
+| `src/lib/layout.shared.tsx` | Logo y enlaces de la barra superior |
+| `src/lib/i18n.ts` | Textos de la interfaz en español |
+| `src/components/mermaid.tsx` | Componente de diagramas |
+| `src/app/global.css` | Colores de la marca |

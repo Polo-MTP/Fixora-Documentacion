@@ -1,0 +1,7 @@
+{
+  "title": "Desarrollo",
+  "description": "Ramas, commits y pull requests",
+  "icon": "GitBranch",
+  "root": true,
+  "pages": ["index", "ramas", "commits", "pull-requests"]
+}

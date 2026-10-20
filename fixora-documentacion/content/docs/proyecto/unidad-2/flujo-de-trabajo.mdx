@@ -1,0 +1,138 @@
+---
+title: "Flujo de trabajo"
+description: "Ramas, nomenclatura ligada a Plane, formato de commits, políticas de combinación y plantilla de pull requests."
+---
+
+El equipo trabaja con dos ramas permanentes (`main` y `develop`) y una rama de trabajo por tarea. Las ramas de trabajo salen de `develop` y vuelven a ella por pull request; `develop` se lleva a producción una vez por semana.
+
+<Mermaid chart={`
+gitGraph
+    commit id: "inicio"
+    branch develop
+    checkout develop
+    commit id: "base"
+    branch feature/APP-42-autenticacion-google
+    checkout feature/APP-42-autenticacion-google
+    commit id: "feat(auth): endpoints"
+    commit id: "test(auth): pruebas"
+    checkout develop
+    merge feature/APP-42-autenticacion-google id: "squash APP-42"
+    branch bugfix/APP-87-correccion-monto-carrito
+    checkout bugfix/APP-87-correccion-monto-carrito
+    commit id: "fix(cart): monto"
+    checkout develop
+    merge bugfix/APP-87-correccion-monto-carrito id: "squash APP-87"
+    branch release/v1.2.0
+    checkout release/v1.2.0
+    commit id: "chore: v1.2.0"
+    checkout main
+    merge release/v1.2.0 id: "v1.2.0"
+    branch hotfix/APP-105-error-500-checkout
+    checkout hotfix/APP-105-error-500-checkout
+    commit id: "fix(checkout): 500"
+    checkout main
+    merge hotfix/APP-105-error-500-checkout id: "v1.2.1"
+`} />
+
+## Ramas
+
+### Ramas principales
+
+| Rama | Propósito |
+| --- | --- |
+| `main` | Refleja el código estable en producción. Siempre debe compilar y estar 100% funcional. |
+| `develop` | Rama de integración donde conviven los desarrollos terminados. Lo integrado aquí se compila para enviarse a producción **una vez por semana**. |
+
+### Ramas de trabajo
+
+Se crean a partir de `develop` para trabajar en una tarea específica. Cuando la tarea termina y su pull request se aprueba, la rama se fusiona con `develop` y se elimina.
+
+## Nomenclatura de ramas e integración con Plane
+
+Se usan las convenciones de nombres de ramas de Git (*Git Branch Naming Conventions*). La estructura es:
+
+```txt
+tipo/ID-de-Plane/descripcion-corta
+```
+
+| Tipo | Uso | Ejemplo |
+| --- | --- | --- |
+| `feature` | Nueva funcionalidad | `feature/APP-42-autenticacion-google` |
+| `bugfix` | Corrección de un error | `bugfix/APP-87-correccion-monto-carrito` |
+| `hotfix` | Corrección urgente en producción | `hotfix/APP-105-error-500-checkout` |
+| `release` | Preparación de un lanzamiento | `release/v1.2.0` |
+
+El ID (`APP-XX`) es la clave de la tarea en Plane, así cada rama queda ligada a su tarea.
+
+## Formato de commits y enlace a Plane
+
+Se adopta el estándar **Conventional Commits 1.0.0**. Para vincular los commits con Plane se incluye la clave de la tarea entre paréntesis al final del mensaje.
+
+```txt
+<tipo>(<módulo/ámbito>): <descripción corta> (<ID-PLANE>)
+
+[cuerpo opcional con mayor detalle]
+```
+
+**Etiquetas:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`.
+
+**Ejemplo:**
+
+```txt
+feat(auth): desarrollo de la lógica para implementación de Google Auth (APP-42)
+
+Se agregaron los endpoints, métodos y controladores para la integración
+con la API de Google Auth.
+```
+
+El significado de cada etiqueta está en [Commits](/docs/desarrollo/commits).
+
+## Políticas de combinación y protección
+
+En GitHub (**Settings → Branches → Branch protection rules**) se configuran reglas estrictas para `main` y `develop`:
+
+| Regla | Detalle |
+| --- | --- |
+| Pull request obligatorio | *Require a pull request before merging*, con al menos **1 aprobación** de un miembro del equipo (Misael). |
+| Sin push directo | Se prohíbe explícitamente hacer push directo a `main` y `develop`. |
+| Borrado automático de ramas | *Automatically delete head branches* activado: la rama se elimina al hacer merge. |
+
+### Estrategia de merge
+
+| Origen → destino | Estrategia | Por qué |
+| --- | --- | --- |
+| `feature/*`, `bugfix/*` → `develop` | **Squash and merge** | Mantiene el historial limpio: resume los commits temporales de la tarea en uno solo. |
+| `release/*`, `hotfix/*` → `main` | **Create a merge commit** | Conserva la trazabilidad completa del lanzamiento. |
+
+## Plantilla de pull requests
+
+Todo pull request en GitHub usa la misma plantilla para estandarizar la revisión:
+
+1. **Descripción de los cambios:** breve explicación de qué hace el PR y qué problema resuelve.
+2. **Vinculación con Plane:** relacionado con la tarea **APP-XX** (enlace a la tarea en Plane).
+3. **Pruebas realizadas:** pruebas unitarias ejecutadas con éxito y verificación en entorno local.
+4. **Capturas o videos (opcional):** cambios de UI/UX, si aplica.
+
+El archivo listo para copiar al repositorio está en [Pull requests](/docs/desarrollo/pull-requests).
+
+## Ciclo de una tarea
+
+<Steps>
+<Step>
+Toma la tarea `APP-XX` en Plane y crea la rama desde `develop` actualizado.
+</Step>
+<Step>
+Trabaja con commits pequeños que sigan Conventional Commits e incluyan el ID.
+</Step>
+<Step>
+Sube la rama y abre el pull request hacia `develop` con la plantilla llena.
+</Step>
+<Step>
+Espera la aprobación y atiende los comentarios de la revisión.
+</Step>
+<Step>
+Haz *squash and merge*; la rama se borra sola y la tarea se cierra en Plane.
+</Step>
+</Steps>
+
+Los comandos paso a paso están en [Ramas](/docs/desarrollo/ramas).

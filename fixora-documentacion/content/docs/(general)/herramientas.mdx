@@ -1,0 +1,27 @@
+---
+title: "Herramientas"
+description: "Lo que usa el equipo para el código, las tareas y la automatización."
+---
+
+| Herramienta | Para qué la usamos |
+| --- | --- |
+| **Git** | Control de versiones distribuido: historial, ramas por tarea y commits con [Conventional Commits](/docs/desarrollo/commits). |
+| **GitHub** | Repositorios remotos, pull requests, revisión de código y reglas de protección de ramas. |
+| **GitHub Actions** | Pruebas y despliegues automáticos cada vez que llega código nuevo (CI/CD). |
+| **Plane** | Backlog, sprints y tareas. El ID de cada tarea (`APP-XX`) da nombre a las ramas y aparece en los commits. |
+| **Fumadocs** | Este sitio de documentación, escrito en MDX. |
+
+La justificación de por qué elegimos Git y GitHub está en [Control de versiones](/docs/proyecto/unidad-2/control-de-versiones).
+
+## Cómo se relacionan
+
+<Mermaid chart={`
+flowchart LR
+    P["Plane<br/>tarea APP-42"] --> B["Rama<br/>feature/APP-42-..."]
+    B --> C["Commits<br/>feat(auth): ... (APP-42)"]
+    C --> PR["Pull request<br/>revisión + checks"]
+    PR --> D["develop"]
+    D -->|semanal| M["main<br/>producción"]
+`} />
+
+Cada tarea de Plane se puede rastrear hasta el código que la resolvió: el ID está en el nombre de la rama, en los commits y en el pull request.

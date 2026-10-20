@@ -2,9 +2,33 @@ import { source } from '@/lib/source';
 import { DocsLayout } from 'fumadocs-ui/layouts/docs';
 import { baseOptions } from '@/lib/layout.shared';
 
+// Color del ícono de cada sección en el selector del sidebar (carpetas con `"root": true` en meta.json).
+const tabColors: Record<string, string> = {
+  '/docs': 'text-brand bg-brand/10',
+  '/docs/proyecto': 'text-amber-500 bg-amber-500/10',
+  '/docs/desarrollo': 'text-emerald-500 bg-emerald-500/10',
+};
+
 export default function Layout({ children }: LayoutProps<'/docs'>) {
   return (
-    <DocsLayout tree={source.getPageTree()} {...baseOptions()}>
+    <DocsLayout
+      tree={source.getPageTree()}
+      {...baseOptions()}
+      // En la documentación el sidebar solo muestra las secciones, sin los enlaces de la barra superior.
+      links={[]}
+      tabs={{
+        transform: (tab) => ({
+          ...tab,
+          icon: tab.icon && (
+            <span
+              className={`flex size-full items-center justify-center rounded-md border [&_svg]:size-4 ${tabColors[tab.url] ?? 'text-brand bg-brand/10'}`}
+            >
+              {tab.icon}
+            </span>
+          ),
+        }),
+      }}
+    >
       {children}
     </DocsLayout>
   );

@@ -1,0 +1,116 @@
+---
+title: "Reseñas y reportes"
+description: "Reseñas entre cliente y proveedor, y reportes levantados por los usuarios con su bitácora."
+---
+
+Módulo con **5 tablas**: `reviews`, `review_attachments`, `reports`, `reports_events`, `report_attachments`. Las convenciones de tipos y llaves están en la [página del diccionario](/docs/proyecto/unidad-2/diccionario-de-datos#convenciones).
+
+## Diagrama
+
+Solo se muestran las llaves primarias (PK) y foráneas (FK). Las tablas sin columnas (`service_requests`, `users`) pertenecen a otros módulos.
+
+<Mermaid chart={`
+erDiagram
+    reviews {
+        BIGINT UniqueID PK
+        BIGINT request_id FK
+        BIGINT author_id FK
+        BIGINT reviewee_id FK
+    }
+    review_attachments {
+        BIGINT UniqueID PK
+        BIGINT review_id FK
+    }
+    reports {
+        BIGINT UniqueID PK
+        BIGINT reporter_id FK
+        BIGINT request_id FK
+        BIGINT assigned_to FK
+    }
+    reports_events {
+        BIGINT UniqueID PK
+        BIGINT report_id FK
+        BIGINT author_id FK
+    }
+    report_attachments
+    service_requests ||--o{ reviews : "request_id"
+    users ||--o{ reviews : "author_id"
+    users ||--o{ reviews : "reviewee_id"
+    reviews ||--o{ review_attachments : "review_id"
+    users ||--o{ reports : "reporter_id"
+    service_requests ||--o{ reports : "request_id"
+    users ||--o{ reports : "assigned_to"
+    reports ||--o{ reports_events : "report_id"
+    users ||--o{ reports_events : "author_id"
+`} />
+
+## Tablas
+
+### `reviews`
+
+Reseñas entre cliente y proveedor.
+
+| Columna       | Tipo    | Llave                 | Descripción                                                       |
+| ------------- | ------- | --------------------- | ----------------------------------------------------------------- |
+| `UniqueID`    | BIGINT  | PK                    | Identificador único del registro.                                 |
+| `request_id`  | BIGINT  | FK → service_requests | Referencia a `service_requests`.                                  |
+| `direction`   | ENUM    |                       | Quién reseña a quién (cliente a proveedor o proveedor a cliente). |
+| `author_id`   | BIGINT  | FK → users            | Usuario que escribe la reseña.                                    |
+| `reviewee_id` | BIGINT  | FK → users            | Usuario reseñado.                                                 |
+| `rating`      | INT     |                       | Calificación numérica (estrellas).                                |
+| `comment`     | VARCHAR |                       | Comentario.                                                       |
+| `status`      | ENUM    |                       | Estado de la reseña (por ejemplo: publicada, oculta).             |
+
+### `review_attachments`
+
+Archivos adjuntos a una reseña.
+
+| Columna       | Tipo     | Llave        | Descripción                                         |
+| ------------- | -------- | ------------ | --------------------------------------------------- |
+| `UniqueID`    | BIGINT   | PK           | Identificador único del registro.                   |
+| `review_id`   | BIGINT   | FK → reviews | Referencia a `reviews`.                             |
+| `storage_key` | VARCHAR  |              | Llave del archivo en el almacenamiento (no la URL). |
+| `mime_type`   | ENUM     |              | Tipo MIME del archivo (imagen, PDF, etc.).          |
+| `size_bytes`  | INT      |              | Tamaño del archivo en bytes.                        |
+| `created_at`  | DATETIME |              | Fecha y hora de creación del registro.              |
+
+### `reports`
+
+Reportes levantados por usuarios.
+
+| Columna           | Tipo     | Llave                 | Descripción                            |
+| ----------------- | -------- | --------------------- | -------------------------------------- |
+| `UniqueID`        | BIGINT   | PK                    | Identificador único del registro.      |
+| `reporter_id`     | BIGINT   | FK → users            | Usuario que levanta el reporte.        |
+| `request_id`      | BIGINT   | FK → service_requests | Referencia a `service_requests`.       |
+| `category`        | ENUM     |                       | Categoría del reporte.                 |
+| `priority`        | ENUM     |                       | Prioridad.                             |
+| `status`          | ENUM     |                       | Estado del reporte.                    |
+| `description`     | VARCHAR  |                       | Descripción en texto libre.            |
+| `assigned_to`     | BIGINT   | FK → users            | Usuario de soporte asignado.           |
+| `resolution_type` | ENUM     |                       | Tipo de resolución.                    |
+| `resolution_note` | VARCHAR  |                       | Nota con la resolución.                |
+| `created_at`      | DATETIME |                       | Fecha y hora de creación del registro. |
+
+### `reports_events`
+
+Bitácora de eventos de un reporte.
+
+| Columna       | Tipo     | Llave        | Descripción                                          |
+| ------------- | -------- | ------------ | ---------------------------------------------------- |
+| `UniqueID`    | BIGINT   | PK           | Identificador único del registro.                    |
+| `report_id`   | BIGINT   | FK → reports | Referencia a `reports`.                              |
+| `author_id`   | BIGINT   | FK → users   | Usuario que genera el evento.                        |
+| `type`        | ENUM     |              | Tipo de evento (comentario, cambio de estado, etc.). |
+| `body`        | VARCHAR  |              | Contenido del evento.                                |
+| `from_status` | ENUM     |              | Estado anterior.                                     |
+| `to_status`   | ENUM     |              | Estado nuevo.                                        |
+| `created_at`  | DATETIME |              | Fecha y hora de creación del registro.               |
+
+### `report_attachments`
+
+Archivos adjuntos a un reporte.
+
+<Callout type="warn" title="Pendiente">
+  Faltan las columnas de esta tabla en la fuente del diccionario.
+</Callout>

@@ -1,0 +1,127 @@
+---
+title: "Cuentas, roles y accesos"
+description: "Cuentas de acceso, roles, datos personales, notificaciones y direcciones de los usuarios."
+---
+
+Módulo con **6 tablas**: `users`, `roles`, `personal_data`, `notifications`, `addresses`, `address_user`. Las convenciones de tipos y llaves están en la [página del diccionario](/docs/proyecto/unidad-2/diccionario-de-datos#convenciones).
+
+## Diagrama
+
+Solo se muestran las llaves primarias (PK) y foráneas (FK).
+
+<Mermaid chart={`
+erDiagram
+    users {
+        BIGINT UniqueID PK
+        BIGINT role_id FK
+    }
+    roles {
+        BIGINT UniqueID PK
+    }
+    personal_data {
+        BIGINT UniqueID PK
+        BIGINT user_id FK
+    }
+    notifications {
+        BIGINT UniqueID PK
+        BIGINT user_id FK
+    }
+    addresses {
+        BIGINT UniqueID PK
+    }
+    address_user {
+        BIGINT UniqueID PK
+        BIGINT user_id FK
+        BIGINT address_id FK
+    }
+    roles ||--o{ users : "role_id"
+    users ||--o{ personal_data : "user_id"
+    users ||--o{ notifications : "user_id"
+    users ||--o{ address_user : "user_id"
+    addresses ||--o{ address_user : "address_id"
+`} />
+
+## Tablas
+
+### `users`
+
+Cuentas de acceso de todos los usuarios del sistema.
+
+| Columna         | Tipo    | Llave      | Descripción                                                                                                    |
+| --------------- | ------- | ---------- | -------------------------------------------------------------------------------------------------------------- |
+| `UniqueID`      | BIGINT  | PK         | Identificador único del registro.                                                                              |
+| `email`         | VARCHAR |            | Correo de acceso. Debe ser único.                                                                              |
+| `password_hash` | VARCHAR |            | Contraseña cifrada (hash). Nunca se guarda en texto plano.                                                     |
+| `role_id`       | BIGINT  | FK → roles | Rol de la cuenta (cliente, proveedor, gerente, empleado, etc.).                                                |
+| `state`         | ENUM    |            | Estado de la cuenta; incluye "por aprobar" mientras un proveedor está en revisión y no puede entrar al portal. |
+
+### `roles`
+
+Catálogo de roles.
+
+| Columna    | Tipo    | Llave | Descripción                                      |
+| ---------- | ------- | ----- | ------------------------------------------------ |
+| `UniqueID` | BIGINT  | PK    | Identificador único del registro.                |
+| `name`     | VARCHAR |       | Nombre del rol (por ejemplo: gerente, empleado). |
+| `active`   | BOOLEAN |       | Indica si el registro está activo (baja lógica). |
+
+### `personal_data`
+
+Datos personales de cada usuario.
+
+| Columna      | Tipo    | Llave      | Descripción                       |
+| ------------ | ------- | ---------- | --------------------------------- |
+| `UniqueID`   | BIGINT  | PK         | Identificador único del registro. |
+| `user_id`    | BIGINT  | FK → users | Referencia a `users`.             |
+| `name`       | VARCHAR |            | Nombre(s) de la persona.          |
+| `lastname_p` | VARCHAR |            | Apellido paterno.                 |
+| `lastname_m` | VARCHAR |            | Apellido materno.                 |
+| `birth_date` | DATE    |            | Fecha de nacimiento.              |
+
+### `notifications`
+
+Notificaciones enviadas a los usuarios.
+
+| Columna       | Tipo     | Llave       | Descripción                                                                                   |
+| ------------- | -------- | ----------- | --------------------------------------------------------------------------------------------- |
+| `UniqueID`    | BIGINT   | PK          | Identificador único del registro.                                                             |
+| `user_id`     | BIGINT   | FK → users  | Referencia a `users`.                                                                         |
+| `type`        | VARCHAR  |             | Tipo de notificación.                                                                         |
+| `title`       | VARCHAR  |             | Título corto.                                                                                 |
+| `message`     | VARCHAR  |             | Texto de la notificación.                                                                     |
+| `entity_type` | VARCHAR  |             | Tipo de entidad a la que apunta (por ejemplo: solicitud, reporte).                            |
+| `entity_id`   | BIGINT   | Polimórfica | Id de la entidad a la que apunta. Se interpreta junto con entity_type (relación polimórfica). |
+| `read_at`     | DATETIME |             | Fecha y hora en que se leyó; nulo si aún no se lee.                                           |
+
+### `addresses`
+
+Direcciones físicas.
+
+| Columna        | Tipo    | Llave | Descripción                                            |
+| -------------- | ------- | ----- | ------------------------------------------------------ |
+| `UniqueID`     | BIGINT  | PK    | Identificador único del registro.                      |
+| `reference`    | VARCHAR |       | Referencias para llegar al lugar.                      |
+| `street`       | VARCHAR |       | Calle.                                                 |
+| `num_ext`      | VARCHAR |       | Número exterior (texto: admite letras, como 12-B).     |
+| `num_int`      | VARCHAR |       | Número interior.                                       |
+| `colony`       | VARCHAR |       | Colonia.                                               |
+| `municipality` | VARCHAR |       | Municipio o alcaldía.                                  |
+| `state`        | VARCHAR |       | Estado.                                                |
+| `postal_code`  | VARCHAR |       | Código postal (texto, para conservar ceros iniciales). |
+| `country`      | VARCHAR |       | País.                                                  |
+| `latitude`     | DECIMAL |       | Latitud geográfica.                                    |
+| `longitude`    | DECIMAL |       | Longitud geográfica.                                   |
+| `active`       | BOOLEAN |       | Indica si el registro está activo (baja lógica).       |
+
+### `address_user`
+
+Relaciona usuarios con sus direcciones guardadas.
+
+| Columna      | Tipo    | Llave          | Descripción                                                                                                                  |
+| ------------ | ------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `UniqueID`   | BIGINT  | PK             | Identificador único del registro.                                                                                            |
+| `user_id`    | BIGINT  | FK → users     | Referencia a `users`.                                                                                                        |
+| `address_id` | BIGINT  | FK → addresses | Referencia a `addresses`.                                                                                                    |
+| `alias`      | VARCHAR |                | Nombre que el usuario le da a la dirección (por ejemplo: Casa, Trabajo).                                                     |
+| `is_main`    | BOOLEAN |                | Verdadero si es una dirección registrada por el usuario; falso si es una dirección ocasional capturada al pedir un servicio. |
+| `active`     | BOOLEAN |                | Indica si el registro está activo (baja lógica).                                                                             |

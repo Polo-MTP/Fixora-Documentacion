@@ -1,14 +1,14 @@
 import { createGetUrl } from 'fumadocs-core/source';
 
-export const appName = 'My App';
+export const appName = 'Fixora';
 export const docsRoute = '/docs';
 export const docsImageRoute = '/og/docs';
 export const docsContentRoute = '/llms.mdx/docs';
 
-// fill this with your actual GitHub info, for example:
+// Repositorio de esta documentación (botón "Abrir en GitHub" de cada página).
 export const gitConfig = {
-  user: 'fuma-nama',
-  repo: 'fumadocs',
+  user: 'Polo-MTP',
+  repo: 'Fixora-Documentacion',
   branch: 'main',
 };
 
@@ -27,3 +27,6 @@ export function getPageImageUrl(page: { slugs: string[]; locale?: string }) {
 
   return { segments, url: getImageUrl(segments, page.locale) };
 }
+
+// Ruta del proyecto Fumadocs dentro del repositorio (la raíz guarda los .md fuente).
+export const docsDir = 'fixora-documentacion/content/docs';

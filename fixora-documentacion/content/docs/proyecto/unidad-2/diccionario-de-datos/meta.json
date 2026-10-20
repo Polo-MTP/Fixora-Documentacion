@@ -1,0 +1,13 @@
+{
+  "title": "Diccionario de datos",
+  "pages": [
+    "index",
+    "cuentas",
+    "negocios",
+    "personal",
+    "proveedores",
+    "servicio",
+    "chat",
+    "resenas-y-reportes"
+  ]
+}

@@ -1,0 +1,53 @@
+---
+title: "Commits"
+description: "Conventional Commits 1.0.0 con el ID de la tarea de Plane."
+---
+
+## Estructura
+
+```txt
+<tipo>(<módulo/ámbito>): <descripción corta> (<ID-PLANE>)
+
+[cuerpo opcional con mayor detalle]
+```
+
+- **tipo:** una de las etiquetas de la tabla de abajo.
+- **módulo/ámbito:** la parte del sistema que cambia, por ejemplo `auth`, `cart` o `chat`.
+- **descripción corta:** qué hace el cambio, en una línea.
+- **ID-PLANE:** la clave de la tarea (`APP-42`), para ligar el commit con Plane.
+
+## Etiquetas
+
+| Tipo | Cuándo usarlo |
+| --- | --- |
+| `feat` | Una funcionalidad nueva. |
+| `fix` | La corrección de un error. |
+| `docs` | Cambios solo en documentación. |
+| `style` | Formato del código (espacios, comas, sangría) sin cambiar su comportamiento. |
+| `refactor` | Reorganizar código sin agregar funciones ni corregir errores. |
+| `perf` | Mejoras de rendimiento. |
+| `test` | Agregar o corregir pruebas. |
+| `build` | Cambios en el sistema de compilación o en las dependencias. |
+| `ci` | Cambios en la integración continua (GitHub Actions). |
+| `chore` | Tareas de mantenimiento que no tocan el código de la aplicación. |
+
+## Ejemplos
+
+```txt
+feat(auth): desarrollo de la lógica para implementación de Google Auth (APP-42)
+
+Se agregaron los endpoints, métodos y controladores para la integración
+con la API de Google Auth.
+```
+
+```txt
+fix(cart): corrige el cálculo del monto del carrito (APP-87)
+```
+
+```txt
+docs(diccionario): agrega las columnas de report_attachments (APP-120)
+```
+
+<Callout title="En pull requests">
+  Las ramas de tarea se integran con *squash*, así que el título del pull request se convierte en el commit final de `develop`: escríbelo con la misma estructura.
+</Callout>

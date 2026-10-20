@@ -1,0 +1,44 @@
+---
+title: "Pull requests"
+description: "Plantilla, revisión y estrategia de merge."
+---
+
+## Plantilla
+
+Guarda este archivo como `.github/pull_request_template.md` en cada repositorio. GitHub lo carga automáticamente al abrir un pull request.
+
+```md title=".github/pull_request_template.md"
+## Descripción de los cambios
+
+<!-- Breve explicación de qué hace este PR y qué problema resuelve. -->
+
+## Vinculación con Plane
+
+Relacionado con la tarea: [APP-XX](enlace-a-la-tarea-en-plane)
+
+## Pruebas realizadas
+
+- [ ] Pruebas unitarias ejecutadas con éxito.
+- [ ] Verificado en entorno local.
+
+## Capturas / videos (opcional)
+
+<!-- Muestra los cambios de UI/UX, si aplica. -->
+```
+
+## Antes de pedir revisión
+
+- [ ] La rama sale de `develop` (o de `main` si es un hotfix) y está al día.
+- [ ] El título sigue [Conventional Commits](/docs/desarrollo/commits) e incluye el ID de Plane.
+- [ ] La plantilla está completa.
+- [ ] Las pruebas pasan en tu entorno local.
+
+## Revisión y merge
+
+| Paso | Detalle |
+| --- | --- |
+| Aprobación | Al menos **1 aprobación** de un miembro del equipo (Misael). |
+| Comentarios | Atiende cada comentario con un commit nuevo en la misma rama. |
+| Merge hacia `develop` | **Squash and merge** para `feature/*` y `bugfix/*`. |
+| Merge hacia `main` | **Create a merge commit** para `release/*` y `hotfix/*`. |
+| Después del merge | La rama se borra sola y la tarea se cierra en Plane. |

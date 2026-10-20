@@ -1,0 +1,60 @@
+---
+title: "Diccionario de datos"
+description: "Tablas, columnas, tipos, llaves y descripción de cada campo de la base de datos de Fixora."
+---
+
+La base de datos de Fixora tiene **36 tablas** agrupadas en **7 módulos**. Se generó a partir del modelo `Fixora DB (corregido).drawio`.
+
+## Convenciones
+
+- Todos los id son **BIGINT**. En el modelo, `string` equivale a **VARCHAR**.
+- **Llave primaria (PK):** la columna `UniqueID` de cada tabla.
+- **Llaves foráneas (FK):** las columnas `*_id` y similares. La tabla de destino aparece en la columna *Llave* (`FK → tabla`).
+- **Polimórfica:** un id cuya tabla de destino depende de otra columna (por ejemplo `entity_id` junto con `entity_type` en `notifications`).
+- Las fechas con hora usan `DATETIME`.
+- Las bajas son **lógicas**, con el campo `active`: los registros no se borran, se desactivan.
+- Los id pueden ir vacíos (nulos) según el caso; por ejemplo, un empleado que aún no se asigna a una solicitud.
+
+## Módulos
+
+| Módulo | Tablas |
+| --- | --- |
+| [Cuentas, roles y accesos](/docs/proyecto/unidad-2/diccionario-de-datos/cuentas) | `users`, `roles`, `personal_data`, `notifications`, `addresses`, `address_user` |
+| [Negocios y sucursales](/docs/proyecto/unidad-2/diccionario-de-datos/negocios) | `business`, `branches`, `branch_schedules`, `categories`, `branches_categories`, `portfolio_works`, `portfolio_media` |
+| [Personal](/docs/proyecto/unidad-2/diccionario-de-datos/personal) | `employees`, `employee_profiles`, `employee_vehicles`, `schedule_blocks` |
+| [Registro y verificación de proveedores](/docs/proyecto/unidad-2/diccionario-de-datos/proveedores) | `suppliers`, `supplier_applications`, `business_supplier`, `type_documents`, `supplier_documents`, `document_validations` |
+| [Servicio](/docs/proyecto/unidad-2/diccionario-de-datos/servicio) | `service_requests`, `request_attachments`, `price_adjustment`, `service_payments`, `income_records` |
+| [Chat](/docs/proyecto/unidad-2/diccionario-de-datos/chat) | `conversations`, `request_messages`, `message_attachments` |
+| [Reseñas y reportes](/docs/proyecto/unidad-2/diccionario-de-datos/resenas-y-reportes) | `reviews`, `review_attachments`, `reports`, `reports_events`, `report_attachments` |
+
+## Cómo se relacionan los módulos
+
+Cada flecha indica que las tablas de un módulo tienen llaves foráneas hacia el otro.
+
+<Mermaid chart={`
+flowchart LR
+    C["Cuentas, roles<br/>y accesos"]
+    N["Negocios<br/>y sucursales"]
+    P["Personal"]
+    V["Proveedores"]
+    S["Servicio"]
+    H["Chat"]
+    R["Reseñas<br/>y reportes"]
+    N --> C
+    P --> C
+    P --> N
+    P --> V
+    V --> C
+    V --> N
+    S --> C
+    S --> N
+    S --> P
+    H --> C
+    H --> S
+    R --> C
+    R --> S
+`} />
+
+<Callout type="warn" title="Pendiente">
+  La tabla `report_attachments` aún no tiene columnas en la fuente del diccionario.
+</Callout>

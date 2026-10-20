@@ -1,0 +1,24 @@
+---
+title: "Desarrollo"
+description: "Cómo trabaja el equipo de Fixora en los repositorios, día a día."
+---
+
+Esta sección es la guía práctica del [flujo de trabajo](/docs/proyecto/unidad-2/flujo-de-trabajo): qué comandos usar para empezar una tarea, cómo escribir los commits y cómo abrir un pull request que pase la revisión a la primera.
+
+## Reglas rápidas
+
+<Callout type="warn" title="Sin push directo">
+  Nadie hace push a `main` ni a `develop`. Todo entra por pull request con al menos una aprobación.
+</Callout>
+
+- Una rama por tarea, creada desde `develop` y con el ID de Plane: `feature/APP-42-autenticacion-google`.
+- Commits con Conventional Commits y el ID al final: `feat(auth): ... (APP-42)`.
+- Los PR de tarea se integran con **Squash and merge**; los de `release/*` y `hotfix/*` con **merge commit**.
+
+## Contenido
+
+<Cards>
+  <Card title="Ramas" href="/docs/desarrollo/ramas">Comandos para empezar una tarea, un lanzamiento o un hotfix.</Card>
+  <Card title="Commits" href="/docs/desarrollo/commits">Estructura, etiquetas y ejemplos de Conventional Commits.</Card>
+  <Card title="Pull requests" href="/docs/desarrollo/pull-requests">Plantilla lista para copiar y checklist de revisión.</Card>
+</Cards>

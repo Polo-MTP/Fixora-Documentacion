@@ -1,0 +1,141 @@
+---
+title: "Servicio"
+description: "Solicitudes de servicio de los clientes, ajustes de precio, pagos e ingresos del proveedor."
+---
+
+Módulo con **5 tablas**: `service_requests`, `request_attachments`, `price_adjustment`, `service_payments`, `income_records`. Las convenciones de tipos y llaves están en la [página del diccionario](/docs/proyecto/unidad-2/diccionario-de-datos#convenciones).
+
+## Diagrama
+
+Solo se muestran las llaves primarias (PK) y foráneas (FK). Las tablas sin columnas (`users`, `categories`, `branches`, `addresses`, `employees`) pertenecen a otros módulos.
+
+<Mermaid chart={`
+erDiagram
+    service_requests {
+        BIGINT UniqueID PK
+        BIGINT client_id FK
+        BIGINT category_id FK
+        BIGINT branch_id FK
+        BIGINT address_id FK
+        BIGINT employee_id FK
+    }
+    request_attachments {
+        BIGINT UniqueID PK
+        BIGINT request_id FK
+    }
+    price_adjustment {
+        BIGINT UniqueID PK
+        BIGINT request_id FK
+        BIGINT declared_by FK
+    }
+    service_payments {
+        BIGINT UniqueID PK
+        BIGINT request_id FK
+    }
+    income_records {
+        BIGINT UniqueID PK
+        BIGINT branch_id FK
+        BIGINT request_id FK
+        BIGINT payment_id FK
+    }
+    users ||--o{ service_requests : "client_id"
+    categories ||--o{ service_requests : "category_id"
+    branches ||--o{ service_requests : "branch_id"
+    addresses ||--o{ service_requests : "address_id"
+    employees ||--o{ service_requests : "employee_id"
+    service_requests ||--o{ request_attachments : "request_id"
+    service_requests ||--o{ price_adjustment : "request_id"
+    users ||--o{ price_adjustment : "declared_by"
+    service_requests ||--o{ service_payments : "request_id"
+    branches ||--o{ income_records : "branch_id"
+    service_requests ||--o{ income_records : "request_id"
+    service_payments ||--o{ income_records : "payment_id"
+`} />
+
+## Tablas
+
+### `service_requests`
+
+Solicitudes de servicio hechas por clientes.
+
+| Columna           | Tipo     | Llave           | Descripción                                                                                  |
+| ----------------- | -------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `UniqueID`        | BIGINT   | PK              | Identificador único del registro.                                                            |
+| `client_id`       | BIGINT   | FK → users      | Cliente que solicita el servicio.                                                            |
+| `category_id`     | BIGINT   | FK → categories | Referencia a `categories`.                                                                   |
+| `branch_id`       | BIGINT   | FK → branches   | Referencia a `branches`.                                                                     |
+| `address_id`      | BIGINT   | FK → addresses  | Dirección donde se realizará el servicio.                                                    |
+| `employee_id`     | BIGINT   | FK → employees  | Empleado asignado; nulo mientras no se asigna.                                               |
+| `is_emergency`    | BOOLEAN  |                 | Si es una solicitud de emergencia.                                                           |
+| `description`     | VARCHAR  |                 | Descripción en texto libre.                                                                  |
+| `status`          | ENUM     |                 | Estado del flujo: pendiente, aceptada, agendada, en curso, completada, cancelada o expirada. |
+| `expires_at`      | DATETIME |                 | Fecha límite para que la solicitud sea aceptada.                                             |
+| `canceled_by`     | ENUM     |                 | Quién canceló (cliente, proveedor o sistema); nulo si no se canceló.                         |
+| `canceled_reason` | VARCHAR  |                 | Motivo de la cancelación.                                                                    |
+| `agreed_price`    | DECIMAL  |                 | Precio acordado al aceptar el servicio.                                                      |
+| `created_at`      | DATETIME |                 | Fecha y hora de creación del registro.                                                       |
+| `scheduled_at`    | DATETIME |                 | Inicio de la cita agendada.                                                                  |
+| `scheduled_end`   | DATETIME |                 | Fin estimado de la cita.                                                                     |
+| `completed_at`    | DATETIME |                 | Fecha y hora en que se completó el servicio.                                                 |
+| `total_amount`    | DECIMAL  |                 | Total final: precio acordado más los ajustes aprobados.                                      |
+
+### `request_attachments`
+
+Archivos adjuntos a una solicitud.
+
+| Columna      | Tipo     | Llave                 | Descripción                                         |
+| ------------ | -------- | --------------------- | --------------------------------------------------- |
+| `UniqueID`   | BIGINT   | PK                    | Identificador único del registro.                   |
+| `request_id` | BIGINT   | FK → service_requests | Referencia a `service_requests`.                    |
+| `file_key`   | VARCHAR  |                       | Llave del archivo en el almacenamiento (no la URL). |
+| `mime_type`  | ENUM     |                       | Tipo MIME del archivo (imagen, PDF, etc.).          |
+| `size_bytes` | INT      |                       | Tamaño del archivo en bytes.                        |
+| `caption`    | VARCHAR  |                       | Texto que acompaña al archivo.                      |
+| `created_at` | DATETIME |                       | Fecha y hora de creación del registro.              |
+
+### `price_adjustment`
+
+Ajustes de precio sobre una solicitud.
+
+| Columna       | Tipo     | Llave                 | Descripción                                                          |
+| ------------- | -------- | --------------------- | -------------------------------------------------------------------- |
+| `UniqueID`    | BIGINT   | PK                    | Identificador único del registro.                                    |
+| `request_id`  | BIGINT   | FK → service_requests | Referencia a `service_requests`.                                     |
+| `amount`      | DECIMAL  |                       | Monto adicional.                                                     |
+| `reason`      | ENUM     |                       | Motivo del ajuste (por ejemplo: materiales extra, tiempo adicional). |
+| `status`      | ENUM     |                       | Estado del ajuste (pendiente, aprobado, rechazado, pagado).          |
+| `declared_by` | BIGINT   | FK → users            | Usuario que declara el ajuste.                                       |
+| `paid_at`     | DATETIME |                       | Fecha y hora en que se pagó.                                         |
+
+### `service_payments`
+
+Pagos de las solicitudes.
+
+| Columna      | Tipo     | Llave                 | Descripción                                          |
+| ------------ | -------- | --------------------- | ---------------------------------------------------- |
+| `UniqueID`   | BIGINT   | PK                    | Identificador único del registro.                    |
+| `request_id` | BIGINT   | FK → service_requests | Referencia a `service_requests`.                     |
+| `amount`     | DECIMAL  |                       | Monto.                                               |
+| `status`     | ENUM     |                       | Estado del pago.                                     |
+| `method`     | ENUM     |                       | Método de pago.                                      |
+| `reference`  | VARCHAR  |                       | Referencia del pago (id de la pasarela o del banco). |
+| `paid_at`    | DATETIME |                       | Fecha y hora en que se pagó.                         |
+| `currency`   | VARCHAR  |                       | Moneda del monto (código ISO, por ejemplo MXN).      |
+
+### `income_records`
+
+Registro de ingresos del proveedor por servicio cobrado.
+
+| Columna             | Tipo     | Llave                 | Descripción                                       |
+| ------------------- | -------- | --------------------- | ------------------------------------------------- |
+| `UniqueID`          | BIGINT   | PK                    | Identificador único del registro.                 |
+| `branch_id`         | BIGINT   | FK → branches         | Referencia a `branches`.                          |
+| `request_id`        | BIGINT   | FK → service_requests | Referencia a `service_requests`.                  |
+| `payment_id`        | BIGINT   | FK → service_payments | Referencia a `service_payments`.                  |
+| `gross_amount`      | DECIMAL  |                       | Monto cobrado al cliente.                         |
+| `commission_amount` | DECIMAL  |                       | Comisión que retiene la plataforma.               |
+| `net_amount`        | DECIMAL  |                       | Monto que recibe el proveedor.                    |
+| `currency`          | VARCHAR  |                       | Moneda del monto (código ISO, por ejemplo MXN).   |
+| `status`            | ENUM     |                       | Estado de la liquidación (pendiente o liquidado). |
+| `settled_at`        | DATETIME |                       | Fecha y hora en que se liquidó al proveedor.      |
+| `created_at`        | DATETIME |                       | Fecha y hora de creación del registro.            |

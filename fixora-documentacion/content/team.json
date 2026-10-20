@@ -1,0 +1,60 @@
+{
+  "members": [
+    {
+      "name": "Misael Trejo Pérez",
+      "role": "Android",
+      "areas": ["movil", "docs"],
+      "github": "Polo-MTP",
+      "summary": "Desarrolla la app de Android y revisa el código antes de integrarlo.",
+      "responsibilities": [
+        "Desarrolla la app móvil en Kotlin.",
+        "Aprueba los pull requests hacia `develop` y `main`.",
+        "Mantiene este sitio de documentación."
+      ]
+    },
+    {
+      "name": "María Fernanda De la Cruz González",
+      "role": "Frontend",
+      "areas": ["web"],
+      "github": "Ferydlc",
+      "summary": "Construye la aplicación web de Fixora.",
+      "responsibilities": [
+        "Desarrolla las pantallas de la web en Angular.",
+        "Integra la web con la API del backend."
+      ]
+    },
+    {
+      "name": "Juan Víctor Solís Hernández",
+      "role": "Frontend",
+      "areas": ["web"],
+      "github": "ZOK75",
+      "summary": "Construye la aplicación web de Fixora.",
+      "responsibilities": [
+        "Desarrolla las pantallas de la web en Angular.",
+        "Integra la web con la API del backend."
+      ]
+    },
+    {
+      "name": "Jesús Alberto Ramírez González",
+      "role": "Backend",
+      "areas": ["backend"],
+      "github": "JesusRamirez03",
+      "summary": "Desarrolla la API y la base de datos de Fixora.",
+      "responsibilities": [
+        "Desarrolla la API en Node.js.",
+        "Implementa el modelo de datos del diccionario."
+      ]
+    },
+    {
+      "name": "Leonardo Antonio Méndez López",
+      "role": "Backend",
+      "areas": ["backend"],
+      "github": "leoskic",
+      "summary": "Desarrolla la API y la base de datos de Fixora.",
+      "responsibilities": [
+        "Desarrolla la API en Node.js.",
+        "Implementa el modelo de datos del diccionario."
+      ]
+    }
+  ]
+}

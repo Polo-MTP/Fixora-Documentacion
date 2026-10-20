@@ -1,0 +1,144 @@
+---
+title: "Negocios y sucursales"
+description: "Negocios de los proveedores, sus sucursales, horarios, categorías de servicio y portafolio."
+---
+
+Módulo con **7 tablas**: `business`, `branches`, `branch_schedules`, `categories`, `branches_categories`, `portfolio_works`, `portfolio_media`. Las convenciones de tipos y llaves están en la [página del diccionario](/docs/proyecto/unidad-2/diccionario-de-datos#convenciones).
+
+## Diagrama
+
+Solo se muestran las llaves primarias (PK) y foráneas (FK). Las tablas sin columnas (`addresses`) pertenecen a otros módulos.
+
+<Mermaid chart={`
+erDiagram
+    business {
+        BIGINT UniqueID PK
+    }
+    branches {
+        BIGINT UniqueID PK
+        BIGINT business_id FK
+        BIGINT address_id FK
+    }
+    branch_schedules {
+        BIGINT UniqueID PK
+        BIGINT branch_id FK
+    }
+    categories {
+        BIGINT UniqueID PK
+    }
+    branches_categories {
+        BIGINT UniqueID PK
+        BIGINT category_id FK
+        BIGINT branch_id FK
+    }
+    portfolio_works {
+        BIGINT UniqueID PK
+        BIGINT branch_id FK
+    }
+    portfolio_media {
+        BIGINT UniqueID PK
+        BIGINT work_id FK
+    }
+    business ||--o{ branches : "business_id"
+    addresses ||--o{ branches : "address_id"
+    branches ||--o{ branch_schedules : "branch_id"
+    categories ||--o{ branches_categories : "category_id"
+    branches ||--o{ branches_categories : "branch_id"
+    branches ||--o{ portfolio_works : "branch_id"
+    portfolio_works ||--o{ portfolio_media : "work_id"
+`} />
+
+## Tablas
+
+### `business`
+
+Negocios registrados por proveedores.
+
+| Columna              | Tipo    | Llave | Descripción                                     |
+| -------------------- | ------- | ----- | ----------------------------------------------- |
+| `UniqueID`           | BIGINT  | PK    | Identificador único del registro.               |
+| `name`               | VARCHAR |       | Nombre del negocio.                             |
+| `tax_identification` | VARCHAR |       | Identificación fiscal del negocio (RFC u otra). |
+| `email`              | VARCHAR |       | Correo electrónico.                             |
+| `phone`              | VARCHAR |       | Teléfono de contacto.                           |
+
+### `branches`
+
+Sucursales de cada negocio.
+
+| Columna             | Tipo    | Llave          | Descripción                                                                                                                |
+| ------------------- | ------- | -------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `UniqueID`          | BIGINT  | PK             | Identificador único del registro.                                                                                          |
+| `business_id`       | BIGINT  | FK → business  | Referencia a `business`.                                                                                                   |
+| `address_id`        | BIGINT  | FK → addresses | Referencia a `addresses`.                                                                                                  |
+| `name`              | VARCHAR |                | Nombre de la sucursal.                                                                                                     |
+| `phone`             | VARCHAR |                | Teléfono de contacto.                                                                                                      |
+| `timezone`          | VARCHAR |                | Zona horaria de la sucursal.                                                                                               |
+| `total_jobs`        | BIGINT  |                | Total de trabajos realizados. Se calcula automáticamente.                                                                  |
+| `accepting_request` | BOOLEAN |                | Si la sucursal está recibiendo solicitudes. Se apaga cuando no hay empleados disponibles o cuando el gerente lo desactiva. |
+| `description`       | VARCHAR |                | Descripción en texto libre.                                                                                                |
+| `logo_key`          | VARCHAR |                | Llave del logo en el almacenamiento.                                                                                       |
+| `email`             | VARCHAR |                | Correo electrónico.                                                                                                        |
+| `rating_avg`        | DECIMAL |                | Calificación promedio de las reseñas recibidas (dato calculado).                                                           |
+| `reviews_count`     | INT     |                | Cantidad de reseñas recibidas (dato calculado).                                                                            |
+
+### `branch_schedules`
+
+Horario de atención de cada sucursal.
+
+| Columna       | Tipo    | Llave         | Descripción                                      |
+| ------------- | ------- | ------------- | ------------------------------------------------ |
+| `UniqueID`    | BIGINT  | PK            | Identificador único del registro.                |
+| `branch_id`   | BIGINT  | FK → branches | Referencia a `branches`.                         |
+| `day_of_week` | INT     |               | Día de la semana (número).                       |
+| `open_time`   | TIME    |               | Hora de apertura.                                |
+| `close_time`  | TIME    |               | Hora de cierre.                                  |
+| `active`      | BOOLEAN |               | Indica si el registro está activo (baja lógica). |
+
+### `categories`
+
+Categorías de servicio.
+
+| Columna      | Tipo    | Llave | Descripción                                                      |
+| ------------ | ------- | ----- | ---------------------------------------------------------------- |
+| `UniqueID`   | BIGINT  | PK    | Identificador único del registro.                                |
+| `name`       | VARCHAR |       | Nombre.                                                          |
+| `slug`       | VARCHAR |       | Texto único para URLs y búsquedas.                               |
+| `active`     | BOOLEAN |       | Indica si el registro está activo (baja lógica).                 |
+| `icon_key`   | VARCHAR |       | Llave del ícono para el acceso directo en la pantalla principal. |
+| `sort_order` | INT     |       | Orden en que se muestra la categoría.                            |
+
+### `branches_categories`
+
+Categorías que atiende cada sucursal y su precio base.
+
+| Columna            | Tipo    | Llave           | Descripción                                                                           |
+| ------------------ | ------- | --------------- | ------------------------------------------------------------------------------------- |
+| `UniqueID`         | BIGINT  | PK              | Identificador único del registro.                                                     |
+| `category_id`      | BIGINT  | FK → categories | Referencia a `categories`.                                                            |
+| `branch_id`        | BIGINT  | FK → branches   | Referencia a `branches`.                                                              |
+| `base_price`       | DECIMAL |                 | Precio base de la sucursal para esa categoría.                                        |
+| `active`           | BOOLEAN |                 | Indica si el registro está activo (baja lógica).                                      |
+| `duration_minutes` | INT     |                 | Duración estimada del servicio, en minutos. Sirve para calcular horarios disponibles. |
+
+### `portfolio_works`
+
+Trabajos del portafolio de una sucursal.
+
+| Columna       | Tipo    | Llave         | Descripción                       |
+| ------------- | ------- | ------------- | --------------------------------- |
+| `UniqueID`    | BIGINT  | PK            | Identificador único del registro. |
+| `branch_id`   | BIGINT  | FK → branches | Referencia a `branches`.          |
+| `title`       | VARCHAR |               | Título del trabajo realizado.     |
+| `description` | VARCHAR |               | Descripción en texto libre.       |
+
+### `portfolio_media`
+
+Fotos de cada trabajo del portafolio.
+
+| Columna       | Tipo    | Llave                | Descripción                                         |
+| ------------- | ------- | -------------------- | --------------------------------------------------- |
+| `UniqueID`    | BIGINT  | PK                   | Identificador único del registro.                   |
+| `work_id`     | BIGINT  | FK → portfolio_works | Trabajo del portafolio al que pertenece la foto.    |
+| `file_key`    | VARCHAR |                      | Llave del archivo en el almacenamiento (no la URL). |
+| `description` | VARCHAR |                      | Descripción en texto libre.                         |

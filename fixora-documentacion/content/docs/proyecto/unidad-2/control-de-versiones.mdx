@@ -1,0 +1,67 @@
+---
+title: "Control de versiones"
+description: "Justificación de Git como sistema de control de versiones y GitHub como plataforma."
+---
+
+Para garantizar un desarrollo ordenado y escalable, se seleccionó **Git** como sistema de control de versiones y **GitHub** como plataforma de alojamiento remoto. La decisión parte de las necesidades de un equipo interdisciplinario de **5 personas** que maneja varios repositorios enfocados en **móvil, web y backend**.
+
+## Necesidades del proyecto
+
+| Necesidad | Por qué |
+| --- | --- |
+| Trabajo simultáneo de 5 integrantes | Cada quien avanza en su frente sin bloquear a los demás. |
+| Varias bases de código | App móvil en Kotlin, web en Angular y backend en Node.js. |
+| Aislar cada funcionalidad | Integraciones como mapas o pasarelas de pago no deben poner en riesgo `main`. |
+| Revisión antes de integrar | Todo código debe ser aprobado por otro integrante. |
+| Trazabilidad con las tareas | Cada cambio debe poder rastrearse hasta su tarea del sprint. |
+| Automatizar pruebas y despliegues | Entregar actualizaciones sin pasos manuales. |
+
+## Sistema de control de versiones: Git
+
+### Desarrollo concurrente y distribuido
+
+Git permite que los 5 integrantes trabajen de forma simultánea en sus entornos locales sin bloquearse entre sí ni alterar el código principal. Esto es vital en un proyecto con varios frentes tecnológicos como Kotlin, Angular y Node.js.
+
+### Estrategia de ramificación (*branching*)
+
+Su arquitectura facilita crear ramas independientes para cada funcionalidad nueva, por ejemplo la integración de mapas o de pasarelas de pago. Así las pruebas y los errores quedan aislados sin comprometer la estabilidad de la rama `main`, que es la que va a producción.
+
+### Trazabilidad y recuperación ante fallas
+
+Git guarda un historial inmutable, identificado con hashes criptográficos, de cada línea de código modificada. Si un cambio provoca una falla crítica en el servidor, se puede revertir el sistema a una versión estable anterior de inmediato.
+
+### Alternativas consideradas
+
+| Criterio | Git | Subversion (SVN) | Mercurial |
+| --- | --- | --- | --- |
+| Modelo | Distribuido | Centralizado | Distribuido |
+| Costo de crear una rama | Mínimo | Alto (copia de directorio) | Mínimo |
+| Trabajo sin conexión | Sí | Limitado | Sí |
+| Soporte en plataformas y herramientas | Estándar de la industria | En declive | Escaso |
+
+**Decisión:** Git, porque su modelo distribuido y sus ramas ligeras hacen posible el flujo de **una rama por tarea** que usa el equipo.
+
+## Plataforma de alojamiento: GitHub
+
+### Revisión de código y control de calidad
+
+GitHub centraliza el trabajo con **pull requests**. Es un filtro técnico: el código de un desarrollador debe ser evaluado y aprobado por otro integrante mediante un *code review* antes de integrarse, lo que reduce errores y posibles vulnerabilidades.
+
+### Alineación con Scrum
+
+Con **GitHub Issues** y los tableros Kanban de **GitHub Projects** se pueden vincular las tareas de cada sprint con los cambios exactos de código que las resuelven. En Fixora las tareas viven en **Plane**, y el vínculo se hace con su ID en ramas, commits y pull requests (ver [Flujo de trabajo](/docs/proyecto/unidad-2/flujo-de-trabajo)).
+
+### Preparación para CI/CD
+
+Con **GitHub Actions** el proyecto tiene la infraestructura para automatizar pruebas y despliegues cada vez que llega código nuevo, lo que agiliza la entrega de actualizaciones.
+
+**Decisión:** GitHub, porque reúne en un mismo lugar la revisión obligatoria, la protección de ramas y la automatización que el equipo necesita.
+
+## Cómo se usa en Fixora
+
+| Herramienta | Uso |
+| --- | --- |
+| **Git** | Historial, una rama por tarea y commits con [Conventional Commits](/docs/desarrollo/commits). |
+| **GitHub** | Repositorios remotos, pull requests y [reglas de protección](/docs/proyecto/unidad-2/flujo-de-trabajo#políticas-de-combinación-y-protección) para `main` y `develop`. |
+| **GitHub Actions** | Pruebas y despliegues automáticos. |
+| **Plane** | Backlog, sprints y tareas `APP-XX` que dan nombre a las ramas. |

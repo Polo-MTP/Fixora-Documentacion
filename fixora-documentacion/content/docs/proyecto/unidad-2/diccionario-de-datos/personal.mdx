@@ -1,0 +1,91 @@
+---
+title: "Personal"
+description: "Empleados de cada sucursal, su perfil público, vehículos y bloqueos de agenda."
+---
+
+Módulo con **4 tablas**: `employees`, `employee_profiles`, `employee_vehicles`, `schedule_blocks`. Las convenciones de tipos y llaves están en la [página del diccionario](/docs/proyecto/unidad-2/diccionario-de-datos#convenciones).
+
+## Diagrama
+
+Solo se muestran las llaves primarias (PK) y foráneas (FK). Las tablas sin columnas (`users`, `branches`, `supplier_documents`) pertenecen a otros módulos.
+
+<Mermaid chart={`
+erDiagram
+    employees {
+        BIGINT UniqueID PK
+        BIGINT user_id FK
+        BIGINT branch_id FK
+    }
+    employee_profiles {
+        BIGINT UniqueID PK
+        BIGINT employee_id FK
+        BIGINT photo_document_id FK
+    }
+    employee_vehicles {
+        BIGINT UniqueID PK
+        BIGINT employee_id FK
+    }
+    schedule_blocks {
+        BIGINT UniqueID PK
+        BIGINT employee_id FK
+    }
+    users ||--o{ employees : "user_id"
+    branches ||--o{ employees : "branch_id"
+    employees ||--o{ employee_profiles : "employee_id"
+    supplier_documents ||--o{ employee_profiles : "photo_document_id"
+    employees ||--o{ employee_vehicles : "employee_id"
+    employees ||--o{ schedule_blocks : "employee_id"
+`} />
+
+## Tablas
+
+### `employees`
+
+Empleados de una sucursal.
+
+| Columna      | Tipo    | Llave         | Descripción                                                                       |
+| ------------ | ------- | ------------- | --------------------------------------------------------------------------------- |
+| `UniqueID`   | BIGINT  | PK            | Identificador único del registro.                                                 |
+| `user_id`    | BIGINT  | FK → users    | Referencia a `users`.                                                             |
+| `branch_id`  | BIGINT  | FK → branches | Referencia a `branches`.                                                          |
+| `can_attend` | BOOLEAN |               | Si el empleado sale a dar servicio. Es falso para un gerente que solo administra. |
+| `active`     | BOOLEAN |               | Indica si el registro está activo (baja lógica).                                  |
+
+### `employee_profiles`
+
+Perfil público del empleado.
+
+| Columna             | Tipo    | Llave                   | Descripción                       |
+| ------------------- | ------- | ----------------------- | --------------------------------- |
+| `UniqueID`          | BIGINT  | PK                      | Identificador único del registro. |
+| `employee_id`       | BIGINT  | FK → employees          | Referencia a `employees`.         |
+| `photo_key`         | VARCHAR |                         | Llave de la foto de perfil.       |
+| `photo_document_id` | BIGINT  | FK → supplier_documents | Documento que respalda la foto.   |
+| `bio`               | VARCHAR |                         | Descripción breve del empleado.   |
+
+### `employee_vehicles`
+
+Vehículos del empleado.
+
+| Columna       | Tipo    | Llave          | Descripción                                      |
+| ------------- | ------- | -------------- | ------------------------------------------------ |
+| `UniqueID`    | BIGINT  | PK             | Identificador único del registro.                |
+| `employee_id` | BIGINT  | FK → employees | Referencia a `employees`.                        |
+| `plate`       | VARCHAR |                | Placas.                                          |
+| `brand`       | VARCHAR |                | Marca.                                           |
+| `model`       | VARCHAR |                | Modelo.                                          |
+| `color`       | VARCHAR |                | Color.                                           |
+| `active`      | BOOLEAN |                | Indica si el registro está activo (baja lógica). |
+
+### `schedule_blocks`
+
+Bloqueos de agenda del empleado.
+
+| Columna       | Tipo     | Llave          | Descripción                             |
+| ------------- | -------- | -------------- | --------------------------------------- |
+| `UniqueID`    | BIGINT   | PK             | Identificador único del registro.       |
+| `employee_id` | BIGINT   | FK → employees | Empleado que bloquea el horario.        |
+| `starts_at`   | DATETIME |                | Inicio del bloqueo.                     |
+| `ends_at`     | DATETIME |                | Fin del bloqueo.                        |
+| `reason`      | ENUM     |                | Motivo (vacaciones, personal, ocupado). |
+| `created_at`  | DATETIME |                | Fecha y hora de creación del registro.  |

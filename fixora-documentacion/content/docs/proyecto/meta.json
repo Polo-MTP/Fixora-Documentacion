@@ -1,0 +1,7 @@
+{
+  "title": "Proyecto",
+  "description": "Entregables formales por unidad",
+  "icon": "GraduationCap",
+  "root": true,
+  "pages": ["index", "unidad-2"]
+}

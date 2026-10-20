@@ -1,0 +1,63 @@
+---
+title: "Ramas"
+description: "Cómo crear, subir e integrar una rama de trabajo."
+---
+
+| Rama | Sale de | Entra a | Ejemplo |
+| --- | --- | --- | --- |
+| `feature/APP-XX-descripcion` | `develop` | `develop` | `feature/APP-42-autenticacion-google` |
+| `bugfix/APP-XX-descripcion` | `develop` | `develop` | `bugfix/APP-87-correccion-monto-carrito` |
+| `release/vX.Y.Z` | `develop` | `main` | `release/v1.2.0` |
+| `hotfix/APP-XX-descripcion` | `main` | `main` | `hotfix/APP-105-error-500-checkout` |
+
+La descripción va en minúsculas, sin acentos y con guiones.
+
+## Empezar una tarea
+
+```bash
+git switch develop
+git pull
+git switch -c feature/APP-42-autenticacion-google
+# ...trabajas y haces commits...
+git push -u origin feature/APP-42-autenticacion-google
+```
+
+Después abre el pull request hacia `develop` en GitHub (o con `gh pr create --base develop`) y llena la [plantilla](/docs/desarrollo/pull-requests).
+
+## Mantener la rama al día
+
+Si `develop` avanzó mientras trabajabas, trae los cambios antes de pedir revisión:
+
+```bash
+git switch develop
+git pull
+git switch feature/APP-42-autenticacion-google
+git merge develop
+```
+
+## Lanzamiento semanal
+
+```bash
+git switch develop
+git pull
+git switch -c release/v1.2.0
+git push -u origin release/v1.2.0
+```
+
+El PR de `release/v1.2.0` va hacia `main` y se integra con **Create a merge commit**.
+
+## Hotfix
+
+Para un error urgente en producción, la rama sale de `main`:
+
+```bash
+git switch main
+git pull
+git switch -c hotfix/APP-105-error-500-checkout
+```
+
+El PR va hacia `main` con **Create a merge commit**. Después lleva la corrección a `develop` para que no se pierda en el siguiente lanzamiento.
+
+<Callout title="Las ramas se borran solas">
+  El repositorio tiene activado *Automatically delete head branches*: al hacer merge, GitHub borra la rama remota. Borra tu copia local con `git branch -d nombre-de-la-rama`.
+</Callout>

@@ -1,0 +1,131 @@
+---
+title: "Registro y verificación de proveedores"
+description: "Alta de proveedores, su solicitud de registro y la verificación de sus documentos."
+---
+
+Módulo con **6 tablas**: `suppliers`, `supplier_applications`, `business_supplier`, `type_documents`, `supplier_documents`, `document_validations`. Las convenciones de tipos y llaves están en la [página del diccionario](/docs/proyecto/unidad-2/diccionario-de-datos#convenciones).
+
+## Diagrama
+
+Solo se muestran las llaves primarias (PK) y foráneas (FK). Las tablas sin columnas (`users`, `business`) pertenecen a otros módulos.
+
+<Mermaid chart={`
+erDiagram
+    suppliers {
+        BIGINT UniqueID PK
+        BIGINT user_id FK
+    }
+    supplier_applications {
+        BIGINT UniqueID PK
+        BIGINT reviewed_by FK
+        BIGINT supplier_id FK
+    }
+    business_supplier {
+        BIGINT UniqueID PK
+        BIGINT business_id FK
+        BIGINT supplier_id FK
+    }
+    type_documents {
+        BIGINT UniqueID PK
+    }
+    supplier_documents {
+        BIGINT UniqueID PK
+        BIGINT supplier_id FK
+        BIGINT type_document_id FK
+    }
+    document_validations {
+        BIGINT UniqueID PK
+        BIGINT document_id FK
+        BIGINT reviewed_by FK
+    }
+    users ||--o{ suppliers : "user_id"
+    users ||--o{ supplier_applications : "reviewed_by"
+    suppliers ||--o{ supplier_applications : "supplier_id"
+    business ||--o{ business_supplier : "business_id"
+    suppliers ||--o{ business_supplier : "supplier_id"
+    suppliers ||--o{ supplier_documents : "supplier_id"
+    type_documents ||--o{ supplier_documents : "type_document_id"
+    supplier_documents ||--o{ document_validations : "document_id"
+    users ||--o{ document_validations : "reviewed_by"
+`} />
+
+## Tablas
+
+### `suppliers`
+
+Proveedores.
+
+| Columna         | Tipo    | Llave      | Descripción                                                                    |
+| --------------- | ------- | ---------- | ------------------------------------------------------------------------------ |
+| `UniqueID`      | BIGINT  | PK         | Identificador único del registro.                                              |
+| `user_id`       | BIGINT  | FK → users | Referencia a `users`.                                                          |
+| `supplier_type` | ENUM    |            | Tipo de proveedor: independiente o empresa. Las empresas piden más documentos. |
+| `rfc`           | VARCHAR |            | RFC del proveedor.                                                             |
+| `active`        | BOOLEAN |            | Indica si el registro está activo (baja lógica).                               |
+
+### `supplier_applications`
+
+Solicitudes para ser proveedor.
+
+| Columna            | Tipo    | Llave          | Descripción                                                           |
+| ------------------ | ------- | -------------- | --------------------------------------------------------------------- |
+| `UniqueID`         | BIGINT  | PK             | Identificador único del registro.                                     |
+| `reviewed_by`      | BIGINT  | FK → users     | Usuario que revisa la solicitud.                                      |
+| `supplier_id`      | BIGINT  | FK → suppliers | Referencia a `suppliers`.                                             |
+| `supplier_type`    | ENUM    |                | Tipo de proveedor solicitado.                                         |
+| `state`            | ENUM    |                | Estado de la solicitud (por ejemplo: pendiente, aprobada, rechazada). |
+| `comments`         | VARCHAR |                | Comentarios del revisor.                                              |
+| `application_date` | DATE    |                | Fecha en que se presentó la solicitud.                                |
+| `due_date`         | DATE    |                | Fecha de vencimiento.                                                 |
+
+### `business_supplier`
+
+Relaciona proveedores con sus negocios.
+
+| Columna       | Tipo    | Llave          | Descripción                                                                                         |
+| ------------- | ------- | -------------- | --------------------------------------------------------------------------------------------------- |
+| `UniqueID`    | BIGINT  | PK             | Identificador único del registro.                                                                   |
+| `business_id` | BIGINT  | FK → business  | Negocio del proveedor. Permite que un proveedor tenga varios negocios; no es lo mismo que sucursal. |
+| `supplier_id` | BIGINT  | FK → suppliers | Referencia a `suppliers`.                                                                           |
+| `active`      | BOOLEAN |                | Indica si el registro está activo (baja lógica).                                                    |
+
+### `type_documents`
+
+Catálogo de documentos que se piden.
+
+| Columna                    | Tipo    | Llave | Descripción                                       |
+| -------------------------- | ------- | ----- | ------------------------------------------------- |
+| `UniqueID`                 | BIGINT  | PK    | Identificador único del registro.                 |
+| `name`                     | VARCHAR |       | Nombre.                                           |
+| `description`              | VARCHAR |       | Descripción en texto libre.                       |
+| `requires_expiration_date` | BOOLEAN |       | Si el documento tiene fecha de vencimiento.       |
+| `supplier_type`            | ENUM    |       | Tipo de proveedor al que se le pide el documento. |
+| `mandatory`                | BOOLEAN |       | Si el documento es obligatorio.                   |
+| `active`                   | BOOLEAN |       | Indica si el registro está activo (baja lógica).  |
+
+### `supplier_documents`
+
+Documentos subidos por proveedores.
+
+| Columna            | Tipo    | Llave               | Descripción                                          |
+| ------------------ | ------- | ------------------- | ---------------------------------------------------- |
+| `UniqueID`         | BIGINT  | PK                  | Identificador único del registro.                    |
+| `supplier_id`      | BIGINT  | FK → suppliers      | Referencia a `suppliers`.                            |
+| `type_document_id` | BIGINT  | FK → type_documents | Referencia a `type_documents`.                       |
+| `file_key`         | VARCHAR |                     | Llave del archivo en el almacenamiento (no la URL).  |
+| `file_hash`        | VARCHAR |                     | Hash del archivo para detectar cambios o duplicados. |
+| `upload_date`      | DATE    |                     | Fecha en que se subió.                               |
+| `due_date`         | DATE    |                     | Fecha de vencimiento.                                |
+
+### `document_validations`
+
+Revisión de cada documento.
+
+| Columna       | Tipo     | Llave                   | Descripción                                      |
+| ------------- | -------- | ----------------------- | ------------------------------------------------ |
+| `UniqueID`    | BIGINT   | PK                      | Identificador único del registro.                |
+| `document_id` | BIGINT   | FK → supplier_documents | Referencia a `supplier_documents`.               |
+| `result`      | VARCHAR  |                         | Resultado de la revisión (aprobado o rechazado). |
+| `reviewed_by` | BIGINT   | FK → users              | Usuario que revisó el documento.                 |
+| `comment`     | VARCHAR  |                         | Comentario.                                      |
+| `reviewed_at` | DATETIME |                         | Fecha y hora de la revisión.                     |
