@@ -1,29 +1,17 @@
-import { Wrench } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
-/** Isotipo de Fixora: la llave dentro de un cuadro con el color de marca. */
+/** Isotipo de Fixora (public/brand/logo.svg, vectorizado del logotipo oficial). */
 export function LogoMark({ className }: { className?: string }) {
-  return (
-    <span
-      aria-hidden
-      className={cn(
-        'inline-flex size-7 shrink-0 items-center justify-center rounded-lg bg-brand-solid text-brand-foreground',
-        className,
-      )}
-    >
-      <Wrench className="size-[60%]" strokeWidth={2.5} />
-    </span>
-  );
+  // eslint-disable-next-line @next/next/no-img-element -- SVG estático, no necesita el optimizador de imágenes
+  return <img src="/brand/logo.svg" alt="" aria-hidden className={cn('h-7 w-auto shrink-0', className)} />;
 }
 
-/** Logotipo completo: isotipo + "Fix" en color de marca + "ora". */
+/** Logotipo completo: isotipo + Fixora. */
 export function Logo() {
   return (
     <span className="flex items-center gap-2">
       <LogoMark />
-      <span className="text-lg font-semibold tracking-tight">
-        <span className="text-brand">Fix</span>ora
-      </span>
+      <span className="font-heading text-[17px] font-semibold tracking-tight">Fixora</span>
     </span>
   );
 }

@@ -24,15 +24,14 @@ export default function TeamPage() {
   return (
     <main className="flex-1 pb-24">
       <section className="relative overflow-hidden border-b">
-        <div className="brand-glow pointer-events-none absolute inset-0" />
-        <div className="blueprint-grid pointer-events-none absolute inset-0" />
+        <div className="hero-dashes pointer-events-none absolute inset-0" />
         <div className="relative mx-auto w-full max-w-6xl px-6 py-20">
           <span className="inline-flex items-center gap-2 rounded-full border bg-fd-background/70 px-3 py-1 text-xs font-medium text-fd-muted-foreground backdrop-blur">
             <span className="size-1.5 rounded-full bg-brand" />
             {members.length} integrantes
           </span>
-          <h1 className="mt-6 text-4xl font-semibold tracking-tight md:text-6xl">
-            Equipo <span className="text-brand">Fixora</span>
+          <h1 className="mt-6 text-4xl font-medium tracking-tight md:text-6xl">
+            Equipo <span className="text-gradient">Fixora</span>
           </h1>
           <p className="mt-5 max-w-2xl text-lg text-fd-muted-foreground">
             Las personas que construyen Fixora, agrupadas por el frente en el que trabajan. Si tienes una duda sobre

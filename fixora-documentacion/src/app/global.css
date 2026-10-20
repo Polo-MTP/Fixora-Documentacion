@@ -6,26 +6,78 @@
    estilo se aplica en src/app/layout.tsx. */
 @source not inline('[&_::highlight(fd-search)]:text-fd-primary [&_::highlight(fd-search)]:underline');
 
+/* Tipografías (cargadas con next/font en src/app/layout.tsx): Inter para el texto, Inter Tight para títulos y
+   DM Mono para código. */
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-inter-tight), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, monospace;
+}
+
 /*
- * Colores de Fixora: azul eléctrico en modo claro y cian en modo oscuro.
- * brand: texto resaltado · brand-solid / brand-foreground: botones · brand-alt: segundo tono de los degradados
+ * Colores del logotipo de Fixora: azul marino (#1C3662) y naranja (#FD6534).
+ * brand: naranja para texto y enlaces · brand-solid: naranja de botones · brand-blue: azul de marca para texto
+ * brand-sky: azul medio (diagramas y degradados) · brand-amber: ámbar (final de los degradados)
+ * navy: azul marino del logo, igual en ambos temas
  */
 @theme {
-  --color-fd-primary: hsl(221, 83%, 53%);
+  --color-fd-background: #ffffff;
+  --color-fd-foreground: #0f1e3a;
+  --color-fd-muted: #eef2f8;
+  --color-fd-muted-foreground: #56627a;
+  --color-fd-popover: #ffffff;
+  --color-fd-popover-foreground: #0f1e3a;
+  --color-fd-card: #f6f8fc;
+  --color-fd-card-foreground: #0f1e3a;
+  --color-fd-border: #e1e7f0;
+  --color-fd-primary: #e4572e;
+  --color-fd-primary-foreground: #ffffff;
+  --color-fd-secondary: #eef2f8;
+  --color-fd-secondary-foreground: #0f1e3a;
+  --color-fd-accent: #e9eef7;
+  --color-fd-accent-foreground: #0f1e3a;
+  --color-fd-ring: #e4572e;
 
-  --color-brand: hsl(221, 83%, 53%);
-  --color-brand-solid: hsl(221, 83%, 53%);
+  --color-brand: #e4572e;
+  --color-brand-solid: #fd6534;
   --color-brand-foreground: #ffffff;
-  --color-brand-alt: hsl(172, 66%, 45%);
+  --color-brand-blue: #1c3662;
+  --color-brand-sky: #3d6fb6;
+  --color-brand-amber: #e0820b;
+  --color-navy: #1c3662;
 }
 
 .dark {
-  --color-fd-primary: hsl(194, 95%, 62%);
+  --color-fd-background: #0a1322;
+  --color-fd-foreground: #eef2f8;
+  --color-fd-muted: #15223a;
+  --color-fd-muted-foreground: #95a3bc;
+  --color-fd-popover: #0f1a2e;
+  --color-fd-popover-foreground: #eef2f8;
+  --color-fd-card: #0f1a2e;
+  --color-fd-card-foreground: #eef2f8;
+  --color-fd-border: #1f2e4a;
+  --color-fd-primary: #ff7a4d;
+  --color-fd-primary-foreground: #0a1322;
+  --color-fd-secondary: #15223a;
+  --color-fd-secondary-foreground: #eef2f8;
+  --color-fd-accent: #1a2944;
+  --color-fd-accent-foreground: #eef2f8;
+  --color-fd-ring: #ff7a4d;
 
-  --color-brand: hsl(194, 95%, 62%);
-  --color-brand-solid: hsl(194, 95%, 62%);
-  --color-brand-foreground: hsl(222, 47%, 8%);
-  --color-brand-alt: hsl(160, 70%, 50%);
+  --color-brand: #ff7a4d;
+  --color-brand-solid: #fd6534;
+  --color-brand-foreground: #ffffff;
+  --color-brand-blue: #8db0ee;
+  --color-brand-sky: #5b8bd9;
+  --color-brand-amber: #ffb35c;
+}
+
+/* El tema neutral de Fumadocs pinta el sidebar oscuro en gris; aquí se alinea con la paleta. */
+.dark #nd-sidebar {
+  --color-fd-muted: #15223a;
+  --color-fd-secondary: #172540;
+  --color-fd-muted-foreground: #95a3bc;
 }
 
 html {
@@ -41,18 +93,93 @@ html > body[data-scroll-locked] {
   --removed-body-scroll-bar-size: 0px !important;
 }
 
-/* Fondo del hero: cuadrícula tipo plano técnico que se desvanece hacia abajo. */
-.blueprint-grid {
-  background-image:
-    linear-gradient(to right, color-mix(in oklch, var(--color-fd-foreground) 7%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklch, var(--color-fd-foreground) 7%, transparent) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: radial-gradient(120% 90% at 50% 0%, black 30%, transparent 75%);
+/* Títulos en Inter Tight con peso medio. */
+h1,
+h2,
+h3,
+h4,
+.font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: -0.015em;
 }
 
-/* Resplandor de marca detrás del hero. */
+.prose :is(h2, h3, h4) {
+  font-weight: 500;
+}
+
+/* Código en línea: texto azul de marca sobre un fondo apenas tintado. */
+.prose :where(code):not(:where(pre code)) {
+  color: var(--color-brand-blue);
+  background-color: color-mix(in oklch, var(--color-brand-sky) 10%, transparent);
+  border-color: color-mix(in oklch, var(--color-brand-sky) 22%, transparent);
+}
+
+/* Elemento activo del sidebar: barra naranja a la izquierda. */
+#nd-sidebar a[data-active='true'] {
+  box-shadow: inset 2px 0 0 0 var(--color-brand);
+}
+
+/* ——— Detalles al estilo de angular.dev, con los colores de Fixora ——— */
+
+:root {
+  /* Texto destacado: naranja → ámbar. */
+  --fx-gradient: linear-gradient(90deg, var(--color-brand) 0%, var(--color-brand-amber) 100%);
+  /* Bordes y fondo del hero: azul → naranja → ámbar (interpolado en oklch, como los degradados de Angular). */
+  --fx-gradient-wide: linear-gradient(
+    120deg in oklch,
+    var(--color-brand-sky) 0%,
+    var(--color-brand-solid) 60%,
+    var(--color-brand-amber) 100%
+  );
+}
+
+.text-gradient {
+  background-image: var(--fx-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Borde de 1px con el degradado de marca (botón principal y tarjetas destacadas). */
+.gradient-border {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--color-fd-background), var(--color-fd-background)) padding-box,
+    var(--fx-gradient-wide) border-box;
+}
+
+/* Hero: guiones diagonales pintados con el degradado y desvanecidos al centro y abajo. */
+.hero-dashes {
+  background-image: var(--fx-gradient-wide);
+  mask-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Cpath d='M10 21 L15 9' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E"),
+    radial-gradient(75% 65% at 50% 38%, transparent 30%, black 85%),
+    linear-gradient(to bottom, black 55%, transparent 100%);
+  mask-size: 30px 30px, 100% 100%, 100% 100%;
+  mask-repeat: repeat, no-repeat, no-repeat;
+  mask-composite: intersect;
+  opacity: 0.5;
+}
+
+/* ——— Fondos de marca ——— */
+
+/* Anillos concéntricos que salen de un punto, como el radio de búsqueda de un mapa, sobre una rejilla de
+   puntos. Se desvanece hacia los bordes. */
+.hero-map {
+  background-image:
+    repeating-radial-gradient(
+      circle at 50% 108%,
+      transparent 0 63px,
+      color-mix(in oklch, var(--color-brand-sky) 26%, transparent) 63px 64px
+    ),
+    radial-gradient(color-mix(in oklch, var(--color-fd-foreground) 14%, transparent) 1px, transparent 1.4px);
+  background-size: 100% 100%, 22px 22px;
+  mask-image: radial-gradient(70% 80% at 50% 70%, black 25%, transparent 80%);
+}
+
+/* Resplandor azul marino y naranja detrás de secciones destacadas. */
 .brand-glow {
   background-image:
-    radial-gradient(45% 60% at 15% 10%, color-mix(in oklch, var(--color-brand-solid) 22%, transparent), transparent 70%),
-    radial-gradient(40% 55% at 90% 40%, color-mix(in oklch, var(--color-brand-alt) 18%, transparent), transparent 70%);
+    radial-gradient(45% 55% at 50% 100%, color-mix(in oklch, var(--color-brand-solid) 16%, transparent), transparent 70%),
+    radial-gradient(50% 60% at 15% 0%, color-mix(in oklch, var(--color-brand-sky) 14%, transparent), transparent 70%);
 }
