@@ -1,6 +1,6 @@
 import data from '../../content/team.json';
 
-/** Áreas en el orden en que se muestran en la página del equipo. */
+/** Áreas válidas en content/team.json. */
 export const areas = ['movil', 'web', 'backend', 'docs'] as const;
 export type Area = (typeof areas)[number];
 
@@ -11,14 +11,18 @@ export const areaInfo: Record<Area, { label: string; stack: string }> = {
   docs: { label: 'Documentación', stack: 'Fumadocs' },
 };
 
-export interface Member {
+/** Datos comunes a cualquier persona de la página: integrantes y docente. */
+export interface Person {
   name: string;
   role: string;
-  areas: Area[];
   summary: string;
-  responsibilities: string[];
   github?: string;
   avatar?: string;
+}
+
+export interface Member extends Person {
+  areas: Area[];
+  responsibilities: string[];
 }
 
 /** Valida content/team.json: si falta algo, el build falla con un mensaje claro en vez de publicar una página rota. */
@@ -45,8 +49,18 @@ export function getMembers(): Member[] {
   return validate(data);
 }
 
-/** Foto del integrante: la propia (en /public), la de GitHub o ninguna (se muestran sus iniciales). */
-export function avatarUrl(member: Member): string | undefined {
+/** Docente del proyecto (opcional en team.json): se muestra aparte, no entre los integrantes. */
+export function getAdvisor(): Person | undefined {
+  const advisor = (data as { advisor?: Partial<Person> }).advisor;
+  if (!advisor) return undefined;
+  if (!advisor.name || !advisor.role || !advisor.summary) {
+    throw new Error('team.json → advisor: faltan "name", "role" o "summary".');
+  }
+  return advisor as Person;
+}
+
+/** Foto de la persona: la propia (en /public), la de GitHub o ninguna (se muestran sus iniciales). */
+export function avatarUrl(member: Person): string | undefined {
   return member.avatar ?? (member.github ? `https://github.com/${member.github}.png?size=160` : undefined);
 }
 

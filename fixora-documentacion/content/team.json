@@ -1,4 +1,10 @@
 {
+  "advisor": {
+    "name": "Jesús Del Toro",
+    "role": "Docente",
+    "github": "JesusDelToroRobledoUTT",
+    "summary": "Docente de la asignatura Desarrollo Web Integral en la Universidad Tecnológica de Torreón. Asesora el proyecto y evalúa los entregables de cada unidad."
+  },
   "members": [
     {
       "name": "Misael Trejo Pérez",

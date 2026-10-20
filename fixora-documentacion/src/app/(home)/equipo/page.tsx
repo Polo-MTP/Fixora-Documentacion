@@ -1,6 +1,15 @@
 import type { Metadata } from 'next';
 import { ArrowUpRight } from 'lucide-react';
-import { areaInfo, areas, avatarUrl, getMembers, initials, type Area, type Member } from '@/lib/team';
+import {
+  areaInfo,
+  avatarUrl,
+  getAdvisor,
+  getMembers,
+  initials,
+  type Area,
+  type Member,
+  type Person,
+} from '@/lib/team';
 
 export const metadata: Metadata = {
   title: 'Equipo',
@@ -15,11 +24,9 @@ const areaColor: Record<Area, string> = {
 };
 
 export default function TeamPage() {
-  const members = getMembers();
-  // Cada integrante aparece una sola vez, en el grupo de su primera área.
-  const groups = areas
-    .map((area) => ({ area, members: members.filter((m) => m.areas[0] === area) }))
-    .filter((group) => group.members.length > 0);
+  // Orden alfabético y una sola cuadrícula: nadie va primero por su área ni por su lugar en team.json.
+  const members = [...getMembers()].sort((a, b) => a.name.localeCompare(b.name, 'es'));
+  const advisor = getAdvisor();
 
   return (
     <main className="flex-1 pb-24">
@@ -34,41 +41,40 @@ export default function TeamPage() {
             Equipo <span className="text-gradient">Fixora</span>
           </h1>
           <p className="mt-5 max-w-2xl text-lg text-fd-muted-foreground">
-            Las personas que construyen Fixora, agrupadas por el frente en el que trabajan. Si tienes una duda sobre
-            una parte del proyecto, aquí sabes a quién preguntarle.
+            Las personas que construyen Fixora y el frente en el que trabaja cada una. Si tienes una duda sobre una
+            parte del proyecto, aquí sabes a quién preguntarle.
           </p>
         </div>
       </section>
 
-      <div className="mx-auto w-full max-w-6xl px-6">
-        {groups.map(({ area, members }) => (
-          <section key={area} className="grid gap-6 border-b py-12 last:border-b-0 md:grid-cols-[220px_1fr]">
-            <header className="md:sticky md:top-24 md:self-start">
-              <span className={`inline-flex rounded-md border px-2.5 py-1 text-xs font-medium ${areaColor[area]}`}>
-                {areaInfo[area].stack}
-              </span>
-              <h2 className="mt-3 text-2xl font-semibold tracking-tight">{areaInfo[area].label}</h2>
-              <p className="mt-1 text-sm text-fd-muted-foreground">
-                {members.length} {members.length === 1 ? 'integrante' : 'integrantes'}
-              </p>
-            </header>
-            <div className="grid gap-4 lg:grid-cols-2">
-              {members.map((member) => (
-                <MemberCard key={member.name} member={member} />
-              ))}
-            </div>
-          </section>
+      {/* Flex centrado en vez de grid: la última fila incompleta queda al centro, no cargada a la izquierda. */}
+      <div className="mx-auto flex w-full max-w-6xl flex-wrap justify-center gap-4 px-6 py-12">
+        {members.map((member) => (
+          <div key={member.name} className="w-full sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-2rem)/3)]">
+            <MemberCard member={member} />
+          </div>
         ))}
       </div>
+
+      {advisor && (
+        <section className="mx-auto w-full max-w-6xl border-t px-6 pt-12">
+          <h2 className="text-center font-mono text-xs uppercase tracking-widest text-fd-muted-foreground">Docente</h2>
+          <div className="mx-auto mt-6 w-full sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-2rem)/3)]">
+            <MemberCard member={advisor} />
+          </div>
+        </section>
+      )}
     </main>
   );
 }
 
-function MemberCard({ member }: { member: Member }) {
+/** Tarjeta de una persona; las responsabilidades y las áreas solo aparecen en los integrantes. */
+function MemberCard({ member }: { member: Person | Member }) {
   const avatar = avatarUrl(member);
+  const { responsibilities = [], areas = [] } = member as Partial<Member>;
 
   return (
-    <article className="flex flex-col rounded-xl border bg-fd-card p-5 transition-colors hover:border-brand/50">
+    <article className="flex h-full flex-col rounded-xl border bg-fd-card p-5 transition-colors hover:border-brand/50">
       <div className="flex items-center gap-4">
         {avatar ? (
           // eslint-disable-next-line @next/next/no-img-element -- avatar externo de GitHub, sin optimizador de imágenes
@@ -97,20 +103,22 @@ function MemberCard({ member }: { member: Member }) {
 
       <p className="mt-4 text-sm">{member.summary}</p>
 
-      <ul className="mt-3 space-y-1.5 text-sm text-fd-muted-foreground">
-        {member.responsibilities.map((item) => (
-          <li key={item} className="flex gap-2">
-            <span className="mt-2 size-1.5 shrink-0 rounded-full bg-brand" />
-            <span>{renderInlineCode(item)}</span>
-          </li>
-        ))}
-      </ul>
+      {responsibilities.length > 0 && (
+        <ul className="mt-3 space-y-1.5 text-sm text-fd-muted-foreground">
+          {responsibilities.map((item) => (
+            <li key={item} className="flex gap-2">
+              <span className="mt-2 size-1.5 shrink-0 rounded-full bg-brand" />
+              <span>{renderInlineCode(item)}</span>
+            </li>
+          ))}
+        </ul>
+      )}
 
-      {member.areas.length > 1 && (
+      {areas.length > 0 && (
         <div className="mt-auto flex flex-wrap gap-1.5 pt-4">
-          {member.areas.map((area) => (
+          {areas.map((area) => (
             <span key={area} className={`rounded-md border px-2 py-0.5 text-xs font-medium ${areaColor[area]}`}>
-              {areaInfo[area].label}
+              {areaInfo[area].label} · {areaInfo[area].stack}
             </span>
           ))}
         </div>
