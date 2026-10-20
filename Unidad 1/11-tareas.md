@@ -1,0 +1,57 @@
+# Separación del proyecto en tareas
+
+## Fase 1: Documentación y planeación
+
+1. Definición de problemática, justificación, objetivos y alcance/limitaciones.
+2. Levantamiento de requisitos funcionales y no funcionales.
+3. Definición de roles (cliente, proveedor, soporte, administrador) y selección de metodología de trabajo.
+
+## Fase 2: Diseño
+
+1. Diseño de la arquitectura general del sistema y del modelo de base de datos.
+2. Diseño de wireframes de las tres plataformas (app Cliente, app Proveedor, portal web).
+3. Diseño de interfaz visual (UI) final y flujo de navegación completo.
+
+## Fase 3: Backend / Servidor
+
+1. Configuración del servidor, base de datos y módulo de autenticación.
+2. Desarrollo del módulo de verificación de proveedores.
+3. Desarrollo del módulo de geolocalización y solicitud de servicio (creación, estados, temporizador).
+4. Desarrollo del módulo de notificaciones push.
+5. Desarrollo del módulo de pagos y adeudos.
+6. Desarrollo del módulo de calificaciones, reseñas, reportes y disputas.
+7. Desarrollo del panel de administración (backoffice).
+
+## Fase 4: Frontend — App Cliente
+
+1. Pantalla principal (recomendados, búsqueda, categorías) y pantalla de mapa.
+2. Ficha del proveedor y formulario de solicitud (incluye botón de emergencia).
+3. Flujo de seguimiento del servicio (espera, ruta/ETA, alarma de llegada).
+4. Pantalla de cierre de servicio (calificación, reseña, reporte) e historial.
+5. Pantalla de cuenta/perfil.
+
+## Fase 5: Frontend — App Proveedor
+
+1. Pantalla de estadísticas, notificaciones y alarma de solicitud entrante.
+2. Flujo de aceptación/rechazo (con temporizador) y mapa hacia el cliente.
+3. Pantalla de cancelación con evidencia y cierre de servicio (pago/adeudo, comentario sobre cliente).
+4. Pantalla de reseñas recibidas e historial de reportes.
+
+## Fase 6: Portal Web (Proveedor)
+
+1. Formulario de registro (datos personales, negocio, ubicación) y carga de documentos para verificación.
+
+## Fase 7: Integración de servicios externos
+
+1. Integración con API de mapas y cálculo de rutas/ETA.
+2. Integración con servicio de notificaciones push.
+
+## Fase 8: Pruebas
+
+1. Pruebas unitarias, de integración y de usabilidad.
+2. Corrección de errores (bugs) detectados en pruebas.
+
+## Fase 9: Documentación final y entrega
+
+1. Elaboración del manual de usuario y documento técnico final.
+2. Preparación de la presentación/demo del proyecto.

@@ -1,0 +1,40 @@
+# Requisitos no funcionales
+
+## Rendimiento
+
+1. El sistema debe actualizar la posición del proveedor en el mapa en tiempo real, de forma que el cliente perciba el movimiento sin retrasos notorios.
+2. El sistema debe notificar al proveedor una nueva solicitud de servicio de forma casi inmediata, para no comprometer el límite de respuesta de 5 minutos.
+
+## Disponibilidad
+
+1. El sistema debe estar disponible en todo momento durante su operación, dado que las solicitudes de servicio pueden generarse en cualquier horario.
+
+## Seguridad
+
+1. El sistema debe proteger la información sensible de los usuarios (RFC, ubicación, documentos de verificación) mediante mecanismos básicos de cifrado y control de acceso.
+2. El sistema debe requerir autenticación (usuario y contraseña) para acceder a las cuentas de cliente y proveedor.
+3. El sistema debe restringir el acceso a los documentos de verificación de proveedores únicamente al rol de Administrador.
+
+## Usabilidad
+
+1. El sistema debe presentar una interfaz simple e intuitiva que permita completar el flujo de solicitud de servicio sin necesidad de instrucciones adicionales.
+2. El botón de emergencia debe ser fácilmente visible y accesible desde la pantalla principal del cliente.
+3. El sistema debe mantener una apariencia y navegación consistente entre la app de cliente y la de proveedor.
+
+## Compatibilidad
+
+1. El sistema debe funcionar correctamente en las versiones más recientes de Android.
+2. El sistema debe integrarse correctamente con los servicios de mapas y notificaciones utilizados (ej. Google Maps, Firebase), respetando sus límites de uso gratuito.
+
+## Eficiencia de recursos
+
+1. El sistema debe procurar un consumo razonable de batería y datos móviles durante el rastreo de ubicación del proveedor.
+
+## Confiabilidad
+
+1. El sistema debe informar al usuario cuando pierda conexión a internet, indicando qué funciones quedarán temporalmente no disponibles.
+2. El sistema debe evitar la pérdida o duplicación de información (solicitudes, pagos, calificaciones) ante fallas de conexión.
+
+## Escalabilidad
+
+1. El sistema debe estar diseñado de forma que permita, a futuro, agregar nuevas categorías de servicio o zonas geográficas sin rediseñar la arquitectura completa.

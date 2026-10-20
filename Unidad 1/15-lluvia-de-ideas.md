@@ -1,0 +1,35 @@
+# Lluvia de ideas
+
+Se identificó la necesidad de desarrollar Fixora, una aplicación móvil que conecte a personas que necesitan contratar un servicio con proveedores disponibles en su zona.
+
+## 1. ¿Qué se quiere lograr?
+
+Facilitar la búsqueda y contratación de servicios a domicilio mediante una plataforma que conecte a clientes con proveedores de manera rápida y sencilla.
+
+## 2. ¿Qué problema se busca resolver?
+
+La dificultad para encontrar proveedores confiables, disponibles y cercanos para realizar reparaciones, mantenimiento y otros servicios.
+
+## 3. ¿Qué se quiere que haga la aplicación?
+
+Permitir buscar servicios, consultar perfiles de proveedores, solicitar cotizaciones, contratar servicios y dar seguimiento a las solicitudes.
+
+## 4. ¿Qué servicios se quieren ofrecer?
+
+Plomería, electricidad, cerrajería, mecánica, limpieza, jardinería, pintura, carpintería, albañilería, refrigeración, reparación de electrodomésticos, mudanzas, tecnología y otros servicios para el hogar y vehículos.
+
+## 5. ¿Cómo se quiere que funcione?
+
+Se busca que los usuarios seleccionen una categoría, indiquen su ubicación, consulten proveedores disponibles y soliciten el servicio. Los proveedores podrán recibir solicitudes y administrar su disponibilidad.
+
+## 6. ¿Cómo se quiere que sea el diseño?
+
+Se busca una interfaz moderna, intuitiva y fácil de utilizar, con categorías organizadas, mapas, perfiles de proveedores y una navegación sencilla.
+
+## 7. ¿Qué se quiere ofrecer a los usuarios?
+
+Una plataforma que facilite la contratación de servicios, permita consultar calificaciones, recibir notificaciones y mantener un historial de solicitudes.
+
+## 8. Resultado de la lluvia de ideas
+
+Se definió una propuesta inicial para Fixora, estableciendo sus objetivos, funciones principales y características, con el propósito de facilitar la conexión entre clientes y proveedores y simplificar la contratación de servicios.

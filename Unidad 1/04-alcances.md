@@ -1,0 +1,9 @@
+# Alcances
+
+- **Registro y validación documental (Móvil y Web):** Aumentará la visibilidad del prestador de servicios en el mercado formal y garantizará la seguridad del cliente al filtrar estrictamente identidades, antecedentes y credenciales antes de habilitar una cuenta.
+- **Búsqueda geolocalizada y perfiles detallados (Móvil):** Reducirá la frustración y el tiempo de búsqueda del usuario al mostrar únicamente técnicos cercanos, permitiendo elegir la mejor opción con base en experiencia, especialidad y evidencia fotográfica de trabajos previos.
+- **Botón de emergencia y alertas sonoras (Móvil):** Acelerará la atención en situaciones críticas al omitir formularios largos y notificar de inmediato a los especialistas de la zona, asegurando una confirmación de respuesta en un máximo de 5 minutos.
+- **Seguimiento GPS y estados del servicio (Móvil):** Eliminará la incertidumbre y el estrés del cliente al permitirle monitorear en tiempo real la ubicación exacta del técnico, su ruta y el tiempo estimado de llegada al domicilio.
+- **Registro de cotizaciones, pagos y adeudos (Móvil):** Prevendrá cobros abusivos al transparentar los costos desde el inicio y protegerá el trabajo del técnico al llevar un control formal de los pagos recibidos o de las cuentas pendientes por cobrar.
+- **Sistema de calificación bidireccional (Móvil):** Fomentará la calidad en los trabajos y el trato respetuoso, creando un filtro natural que premia a los mejores profesionales y alerta a la comunidad sobre clientes o técnicos problemáticos.
+- **Panel de administración y gestión de disputas (Web):** Facilitará la resolución justa y rápida de cualquier conflicto al brindar al equipo de soporte un historial totalmente auditable de cada servicio (tiempos, ubicaciones, cancelaciones justificadas y reportes).

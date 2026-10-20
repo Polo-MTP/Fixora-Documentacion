@@ -1,0 +1,32 @@
+# Elección de estructura web y tecnologías
+
+## Estructura web seleccionada
+
+**Estructura cliente-servidor basada en la nube.**
+
+Ya que nos permite centralizar toda la lógica de la aplicación, el procedimiento de emparejamiento y las bases en un entorno remoto seguro y altamente disponible, lo cual es crucial para la atención a emergencias. Separar el trabajo pesado de los dispositivos móviles, asegurando que las apps sean ligeras y facilitar los recursos de los servidores automáticamente si hay picos de demanda.
+
+## Tecnologías seleccionadas
+
+| Capa | Tecnología |
+| --- | --- |
+| Web | Angular |
+| Móvil | Kotlin |
+| API | Express |
+| Base de datos relacional | PostgreSQL |
+
+### Web: Angular
+
+Se eligió debido a que es un framework altamente estructurado diseñado para crear aplicaciones empresariales completas. Es ideal para construir el panel de administración porque permite manejar de forma eficiente flujos pesados de información, como la validación de múltiples documentos al mismo tiempo, tablas dinámicas de gestión de disputas y métricas en tiempo real con una arquitectura limpia.
+
+### Móvil: Kotlin
+
+Es una excelente opción ya que ofrece el máximo rendimiento nativo en el ecosistema Android y para una aplicación depende críticamente de la precisión del mapa Kotlin nos permite una integración directa y producida con el hardware del teléfono. Garantiza un rastreo GPS en segundo plano preciso y eficiente, también tiene un manejo nativo de las notificaciones push con alarmas sonoras para las emergencias y un acceso fluido a la cámara para la captura de evidencias.
+
+### API: Express
+
+Express es extremadamente rápido para procesar miles de peticiones ligeras de forma simultánea. Esto es un requerimiento técnico obligado para el proyecto, ya que el servidor debe de ser capaz de recibir y redistribuir las coordenadas GPS de los técnicos cada poco segundo, gestionar los temporizadores de respuestas y soporta la comunicación en tiempo real sin colapsar.
+
+### Base de datos relacional: PostgreSQL
+
+Tiene una máxima fiabilidad y seguridad. Al manejar transacciones económicas y datos sensibles, PostgreSQL asegura que la información crítica jamás se duplique ni se corrompa. Es la mejor opción para resguardar los perfiles verificados, etc.
