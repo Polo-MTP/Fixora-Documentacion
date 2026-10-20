@@ -3,5 +3,5 @@
   "description": "Entregables formales por unidad",
   "icon": "GraduationCap",
   "root": true,
-  "pages": ["index", "unidad-2"]
+  "pages": ["index", "unidad-1", "unidad-2"]
 }

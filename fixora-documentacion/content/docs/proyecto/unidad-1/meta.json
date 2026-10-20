@@ -1,0 +1,25 @@
+{
+  "title": "Unidad 1 · Anteproyecto",
+  "pages": [
+    "index",
+    "---Planteamiento---",
+    "problematica",
+    "justificacion",
+    "objetivos",
+    "alcances",
+    "lluvia-de-ideas",
+    "---Requisitos---",
+    "requisitos-funcionales",
+    "requisitos-no-funcionales",
+    "limitaciones",
+    "mvp",
+    "---Planeación---",
+    "analisis-de-riesgos",
+    "metodologia-y-roles",
+    "tareas",
+    "---Diseño técnico---",
+    "estructura-y-tecnologias",
+    "patron-de-diseno",
+    "wireframes"
+  ]
+}

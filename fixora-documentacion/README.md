@@ -15,6 +15,7 @@ Abre http://localhost:3000.
 content/docs/
 ├── (general)/              Introducción y herramientas
 ├── proyecto/               Entregables formales
+│   ├── unidad-1/           Anteproyecto (fuente: carpeta "Unidad 1" de la raíz)
 │   └── unidad-2/
 │       ├── control-de-versiones.mdx
 │       ├── flujo-de-trabajo.mdx
@@ -23,7 +24,8 @@ content/docs/
 ```
 
 - Cada carpeta tiene un `meta.json` con el título y el orden de sus páginas. Las que llevan `"root": true` aparecen como secciones en el selector del menú lateral.
-- Los archivos `.md` de la raíz del repositorio son la fuente original del contenido.
+- Las carpetas `Unidad 1` y `Unidad 2` de la raíz del repositorio guardan la fuente original del contenido.
+- La matriz de riesgos se dibuja con `<RiskMatrix risks={[{ id, p, i }]} />`.
 - Para diagramas usa `<Mermaid chart={`...`} />` dentro de cualquier `.mdx`.
 
 ## Código

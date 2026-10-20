@@ -10,6 +10,7 @@ export function baseOptions(): BaseLayoutProps {
     links: [
       { text: 'Inicio', url: '/', active: 'url' },
       { text: 'Documentación', url: '/docs', active: 'nested-url' },
+      { text: 'Anteproyecto', url: '/docs/proyecto/unidad-1', active: 'nested-url' },
       { text: 'Diccionario de datos', url: '/docs/proyecto/unidad-2/diccionario-de-datos', active: 'nested-url' },
       { text: 'Equipo', url: '/equipo', active: 'url' },
     ],

@@ -1,0 +1,32 @@
+---
+title: "Limitaciones"
+description: "Restricciones técnicas, operativas, financieras y legales del proyecto."
+---
+
+## Limitaciones técnicas
+
+- **Dependencia de conexión a internet.** La aplicación requiere datos móviles continuos y estables. En zonas rurales o con señal deficiente, el rastreo en tiempo real, el envío de solicitudes y la actualización de estados quedarán interrumpidos o inhabilitados.
+- **Precisión de la geolocalización.** El cálculo de rutas, tiempos estimados de llegada y visualización en mapa dependen de la precisión del GPS de cada dispositivo, así como de condiciones climáticas o interferencias estructurales urbanas.
+- **Consumo de recursos en segundo plano.** El monitoreo continuo de ubicación del proveedor para el rastreo en tiempo real y el sistema de alarmas implica un consumo elevado de batería y datos móviles.
+- **Costos y cuotas de APIs de terceros.** El uso de servicios de mapas, cálculo de rutas (Google Maps Platform) y mensajería/notificaciones está sujeto a límites de cuota gratuita y costos escalables, lo cual puede limitar la frecuencia de peticiones en etapas iniciales del proyecto.
+
+## Limitaciones operativas
+
+- **Cobertura geográfica delimitada.** En su fase inicial, la plataforma operará en una ciudad o zona metropolitana específica, sin garantizar disponibilidad de proveedores fuera del radio urbano planificado.
+- **Disponibilidad real de técnicos 24/7.** Aunque la app permite solicitar servicios a cualquier hora, la atención depende de la oferta voluntaria de técnicos conectados. La plataforma no puede obligar contractualmente a un proveedor a estar disponible ni a responder en horarios nocturnos o festivos si no hay suficientes técnicos activos en la zona.
+- **Restricción del tiempo de respuesta (5 minutos).** Este límite establece un balance intencional entre la agilidad para el cliente y un margen razonable para el técnico. Se reconoce como un trade-off de diseño: puede percibirse largo ante una urgencia crítica, o corto si el proveedor se encuentra conduciendo o atendiendo otra labor.
+- **Uso indebido del botón de emergencia.** El sistema no puede validar en el momento si una solicitud marcada como emergencia lo es realmente, por lo que su correcto uso depende de la buena fe del cliente. Un uso indebido puede generar prioridades falsas frente a otros servicios legítimos.
+- **Complejidad en la estandarización de costos.** Ciertos trabajos (fallas eléctricas ocultas, averías mecánicas, etc.) no pueden diagnosticarse con exactitud sin inspección física previa, lo que puede derivar en cotizaciones adicionales fuera de la tarifa base inicial. Esta excepción se mantiene controlada y comunicada al cliente desde el primer contacto, para no contradecir el compromiso de precios justos y transparentes que persigue la plataforma.
+- **Escalabilidad de la base de proveedores en el lanzamiento.** Como toda plataforma de dos lados (clientes y proveedores), el crecimiento inicial depende de lograr una masa crítica de técnicos activos por zona; sin suficiente oferta, la experiencia y disponibilidad percibida por el cliente puede verse limitada durante el arranque.
+
+## Limitaciones financieras
+
+- **Manejo de pagos en efectivo y adeudos.** Al permitir liquidaciones fuera de la plataforma, el sistema depende de la declaración honesta de ambas partes, lo que abre margen a discrepancias, cobros no registrados o adeudos difíciles de recuperar por el técnico.
+- **Ausencia inicial de pasarela de pago bancaria automatizada.** Al centrarse en efectivo y transferencias directas en su primera versión, la plataforma no retiene fondos en garantía, limitando su capacidad de emitir reembolsos automáticos ante cancelaciones o disputas.
+
+## Limitaciones legales y de verificación
+
+- **Verificación documental de proveedores.** La validación de datos, RFC y comprobantes de negocio es documental. La plataforma no realiza pruebas prácticas de competencia técnica ni certificaciones oficiales de oficio (ej. peritajes de fontanería o mecánica); la idoneidad técnica se respalda en reputación y portafolio, pero no puede garantizarse al 100%.
+- **Delimitación de responsabilidad civil y laboral.** La plataforma actúa exclusivamente como intermediario tecnológico entre clientes y profesionales independientes. La empresa desarrolladora no asume responsabilidad civil, contractual ni penal por daños materiales, accidentes, defectos de obra o incidentes ocurridos en el domicilio o sobre los vehículos atendidos.
+- **Protección de datos personales y sensibles.** El manejo de RFC, ubicación en tiempo real y antecedentes somete a la plataforma a regulaciones estrictas de privacidad, limitando la retención de datos históricos y exigiendo mecanismos de consentimiento expreso.
+- **Alcance del sistema de sanciones.** Las penalizaciones a proveedores por cancelaciones injustificadas se limitarán, en primera instancia, a restricciones temporales de cuenta o decrementos en el puntaje de reputación, sin contemplar cobros coercitivos bancarios automáticos.
