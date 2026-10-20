@@ -1,0 +1,9 @@
+{
+  "name": "fumados",
+  "compatibility_date": "2026-10-01",
+  // Sitio estático: `pnpm run build` genera `out/` y Cloudflare lo sirve sin código de servidor.
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}
