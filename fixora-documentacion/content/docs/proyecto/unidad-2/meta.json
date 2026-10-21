@@ -1,4 +1,12 @@
 {
   "title": "Unidad 2 · Versionamiento y datos",
-  "pages": ["index", "control-de-versiones", "flujo-de-trabajo", "diccionario-de-datos"]
+  "pages": [
+    "index",
+    "control-de-versiones",
+    "configuracion-del-entorno",
+    "flujo-de-trabajo",
+    "diccionario-de-datos",
+    "diagramas",
+    "disenos"
+  ]
 }

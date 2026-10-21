@@ -1,0 +1,121 @@
+---
+title: "Configuración del entorno"
+description: "Plataforma, repositorios, acceso, registro de cambios, archivos excluidos y seguridad del entorno de versiones."
+---
+
+Esta página define cómo está configurado el control de versiones de Fixora: dónde se alojan los repositorios, cómo se organizan, cómo se accede a ellos, cómo se registran los cambios y qué archivos se excluyen.
+
+El objetivo es mantener un historial ordenado, facilitar el trabajo en equipo y evitar que entren al repositorio archivos innecesarios o información confidencial.
+
+## Plataforma y herramienta
+
+| Parámetro | Valor |
+| --- | --- |
+| Sistema de control de versiones | **Git** 2.48.1 |
+| Plataforma de alojamiento | **GitHub** |
+| Rama principal | `main` |
+| Visibilidad | Privada, solo para los integrantes autorizados del equipo |
+
+La justificación de estas herramientas está en [Control de versiones](/docs/proyecto/unidad-2/control-de-versiones).
+
+## Repositorios
+
+El proyecto se divide en cuatro repositorios independientes:
+
+| Repositorio | Contenido |
+| --- | --- |
+| `Documentacion` | Documentación técnica y académica del proyecto. |
+| `Fixora-Android` | Aplicación móvil para Android. |
+| `Fixora-Backend` | Servidor y lógica de procesamiento del sistema. |
+| `Fixora-Frontend` | Interfaz web. |
+
+Separarlos permite administrar los cambios de cada componente por su cuenta, con un historial propio para cada uno.
+
+## Acceso
+
+Todos los integrantes tienen acceso a los cuatro repositorios. Se pueden clonar y sincronizar de dos formas:
+
+- **HTTPS:** con la URL HTTPS del repositorio y el método de autenticación que admite GitHub.
+- **SSH:** con la URL SSH y una clave configurada en la cuenta de GitHub del integrante.
+
+Cada quien usa la que mejor se adapte a su equipo. Las credenciales y las claves privadas nunca se suben al repositorio.
+
+<Callout type="warn">
+  Los permisos de escritura y administración, y la protección de ramas, se documentarán cuando se verifiquen en GitHub.
+</Callout>
+
+## Rama principal y registro de cambios
+
+La línea principal de desarrollo de cada repositorio está en `main`. Los mensajes de commit siguen la convención **Conventional Commits**:
+
+```text
+<tipo>[ámbito opcional]: <descripción>
+```
+
+| Ejemplo | Para qué |
+| --- | --- |
+| `feat: agregar inicio de sesión` | Una funcionalidad nueva |
+| `fix: corregir validación del formulario` | Una corrección |
+| `docs: actualizar documentación del proyecto` | Documentación |
+| `refactor: reorganizar servicio de usuarios` | Reorganizar código sin cambiar lo que hace |
+| `test: agregar pruebas de autenticación` | Pruebas |
+| `chore: actualizar dependencias` | Mantenimiento |
+
+Así se identifica a simple vista el propósito de cada cambio. La lista completa de tipos y la nomenclatura de ramas están en [Flujo de trabajo](/docs/proyecto/unidad-2/flujo-de-trabajo).
+
+## Archivos excluidos (`.gitignore`)
+
+Cada repositorio tiene un `.gitignore` con los archivos y carpetas que Git no debe seguir.
+
+<Tabs items={['Fixora-Frontend', 'Fixora-Android', 'Fixora-Backend', 'Documentacion']}>
+  <Tab value="Fixora-Frontend">
+    - **Compilados y temporales:** `dist`, `tmp`, `out-tsc` y `bazel-out`.
+    - **Dependencias de Node.js:** `node_modules` y registros de error de los gestores de paquetes.
+    - **Editores:** configuraciones de IntelliJ, Eclipse, Sublime Text y Visual Studio Code, salvo algunas configuraciones compartidas.
+    - **Cachés, pruebas y cobertura:** caché de Angular, resultados de cobertura y archivos generados por las pruebas.
+    - **Sistema operativo:** `.DS_Store` y `Thumbs.db`.
+
+    Así no se comparten dependencias instaladas ni archivos generados en cada computadora.
+  </Tab>
+  <Tab value="Fixora-Android">
+    - Configuraciones locales de IntelliJ IDEA y Android Studio.
+    - La carpeta `.gradle` y lo generado en `build`.
+    - `local.properties`, que guarda la ruta local del SDK de Android.
+    - Lo generado por la compilación nativa: `.externalNativeBuild` y `.cxx`.
+    - Capturas y archivos auxiliares de desarrollo.
+    - Archivos del sistema operativo, como `.DS_Store`.
+
+    En el repositorio queda solo el código y los recursos del proyecto, sin la configuración particular de cada equipo.
+  </Tab>
+  <Tab value="Fixora-Backend">
+    Se compartió primero con el nombre `Fixora-Api`.
+
+    - **Dependencias:** `node_modules`.
+    - **Variables de entorno:** `.env`, sus variantes y los archivos locales, excepto `.env.example`.
+    - **Compilación:** `dist`, `build` y `out`.
+    - **Registros:** logs y registros de los gestores de paquetes.
+    - **TypeScript:** `*.tsbuildinfo`.
+    - **Pruebas:** cobertura y resultados de herramientas de análisis.
+    - **Editores:** configuraciones de Visual Studio Code e IntelliJ IDEA y archivos temporales.
+    - **Sistema operativo:** `.DS_Store` y `Thumbs.db`.
+    - **Temporales y de ejecución:** `tmp`, `temp`, archivos de procesos y archivos de semillas.
+
+    La excepción `!.env.example` deja en el repositorio una plantilla con los nombres de las variables de entorno, sin sus valores.
+  </Tab>
+  <Tab value="Documentacion">
+    El repositorio tiene `.gitignore`. Falta revisar su contenido para describir qué excluye.
+  </Tab>
+</Tabs>
+
+<Callout>
+  `.gitignore` no saca del repositorio los archivos que Git ya estaba siguiendo. Para dejar de versionar uno de esos archivos hay que quitarlo del índice, por ejemplo con `git rm --cached <archivo>`.
+</Callout>
+
+## Seguridad
+
+- Los repositorios son privados y solo tienen acceso los integrantes autorizados.
+- Contraseñas, tokens, claves privadas y valores de variables de entorno no se suben al control de versiones.
+
+<Callout type="warn">
+  Las reglas de protección de ramas, los permisos de cada colaborador y el método de autenticación de cada integrante se documentarán al comprobar la configuración real de GitHub.
+</Callout>
